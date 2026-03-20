@@ -8,104 +8,127 @@
 
 <style>
 body{
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background:linear-gradient(135deg,#ffd6e0,#ffeef2);
-  color:#3b2f2f;
-  overflow:hidden;
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(135deg,#ffd6e0,#ffeef2);
+color:#3b2f2f;
 }
 
 /* NAV */
 .navbar{
-  position:fixed; top:0; width:100%;
-  display:flex; justify-content:center; gap:40px;
-  padding:15px; background:rgba(255,255,255,0.5);
-  backdrop-filter:blur(10px); z-index:1000;
+position:fixed; top:0; width:100%;
+display:flex; justify-content:center; gap:30px;
+padding:15px; background:rgba(255,255,255,0.6);
 }
 
-/* SCREEN */
-.screen{
-  position:absolute; width:100%; height:100%;
-  display:flex; justify-content:center; align-items:center;
+/* SECTION */
+.section{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
 }
-.hidden{display:none;}
 
-/* CARD */
 .card{
-  background:rgba(255,255,255,0.7);
-  padding:40px; border-radius:20px;
-  text-align:center;
+background:rgba(255,255,255,0.7);
+padding:40px;
+border-radius:20px;
+text-align:center;
 }
 
-/* CURSIVE */
+/* TITLE */
 h1{
-  font-family:'Great Vibes',cursive;
-  font-size:3rem;
+font-family:'Great Vibes',cursive;
+font-size:3rem;
 }
 
 /* BUTTON */
 button{
-  margin-top:15px;
-  padding:10px 20px;
-  border:none; border-radius:20px;
-  background:#ff9aa2; color:white;
-  cursor:pointer;
+margin-top:15px;
+padding:10px 20px;
+border:none;
+border-radius:20px;
+background:#ff9aa2;
+color:white;
+cursor:pointer;
 }
 
-/* CANVAS DRAW */
+/* CAKE */
+#cakeBox{
+position:relative;
+width:150px;height:150px;
+margin:auto;
+}
+
 #drawCanvas{
-  position:absolute;
-  width:150px; height:150px;
-  cursor:crosshair;
+position:absolute;
+top:15px;
+left:15px;
+width:120px;height:120px;
 }
 
-/* COLOR PALETTE */
+/* PALETTE */
 .palette span{
-  display:inline-block;
-  width:20px;height:20px;
-  border-radius:50%;margin:5px;
-  cursor:pointer;
+display:inline-block;
+width:20px;height:20px;
+border-radius:50%;
+margin:5px;
+cursor:pointer;
 }
 
-/* GALLERY FLIP */
+/* GALLERY */
+.gallery{
+display:grid;
+grid-template-columns:repeat(2,150px);
+gap:15px;
+}
+
+.gallery img{
+width:150px;height:150px;
+object-fit:cover;
+border-radius:10px;
+border:2px dotted #ff9aa2;
+cursor:pointer;
+}
+
+/* FLIP */
 .flip{
-  width:150px;height:150px;
-  perspective:1000px;
+perspective:1000px;
 }
-.flip-inner{
-  position:relative;width:100%;height:100%;
-  transition:transform 0.6s;
-  transform-style:preserve-3d;
+.inner{
+transition:0.6s;
+transform-style:preserve-3d;
+position:relative;
 }
-.flip.clicked .flip-inner{
-  transform:rotateY(180deg);
+.flip.clicked .inner{
+transform:rotateY(180deg);
 }
-.flip-front, .flip-back{
-  position:absolute;width:100%;height:100%;
-  backface-visibility:hidden;
-  border-radius:10px;
+.front,.back{
+position:absolute;
+width:100%;height:100%;
+backface-visibility:hidden;
 }
-.flip-front img{
-  width:100%;height:100%;object-fit:cover;
-}
-.flip-back{
-  background:white;display:flex;
-  justify-content:center;align-items:center;
-  transform:rotateY(180deg);
-  padding:10px;font-size:12px;
+.back{
+transform:rotateY(180deg);
+background:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+padding:5px;
 }
 
 /* BALLOONS */
 .balloon{
-  position:absolute;
-  bottom:-50px;
-  width:30px;height:40px;
-  background:#ff9aa2;
-  border-radius:50%;
-  animation:float 6s infinite;
+position:absolute;
+bottom:-50px;
+width:30px;height:40px;
+background:#ff9aa2;
+border-radius:50%;
+animation:float 6s infinite;
 }
 @keyframes float{
-  to{transform:translateY(-110vh);}
+to{transform:translateY(-100vh);}
 }
 
 /* CONFETTI */
@@ -116,113 +139,104 @@ canvas{position:absolute;top:0;}
 <body>
 
 <div class="navbar">
-  <span onclick="goTo('home')">Home</span>
-  <span onclick="goTo('cake')">Cake</span>
-  <span onclick="goTo('memories')">Memories</span>
-  <span onclick="goTo('letter')">Letter</span>
+<a href="#home">Home</a>
+<a href="#cake">Cake</a>
+<a href="#memories">Memories</a>
+<a href="#letter">Letter</a>
 </div>
 
 <canvas id="confetti"></canvas>
 
 <!-- HOME -->
-<div class="screen" id="home">
+<div class="section" id="home">
 <div class="card">
 <h1>Happy Birthday ❤️</h1>
-<button onclick="goTo('cake')">click this only if you love me</button>
+<button onclick="playHB()">start 🎂</button>
 </div>
 </div>
 
 <!-- CAKE -->
-<div class="screen hidden" id="cake">
+<div class="section" id="cake">
 <div class="card">
 <h2>decorate your cake 🎂</h2>
 
-<div style="position:relative;">
-<div style="font-size:120px;">🎂</div>
+<div id="cakeBox">
+<div id="cakeBase" style="font-size:120px;">🎂</div>
 <canvas id="drawCanvas"></canvas>
+<div id="knife" style="display:none;position:absolute;top:50px;left:50px;font-size:30px;cursor:pointer;">🔪</div>
 </div>
 
 <div class="palette">
 <span style="background:red" onclick="setColor('red')"></span>
 <span style="background:blue" onclick="setColor('blue')"></span>
-<span style="background:green" onclick="setColor('green')"></span>
-<span style="background:purple" onclick="setColor('purple')"></span>
 <span style="background:black" onclick="setColor('black')"></span>
 </div>
 
-<button onclick="cutCake()">cut the cake 🎂</button>
-</div>
-</div>
-
-<!-- CELEBRATION -->
-<div class="screen hidden" id="celebrate">
-<div class="card">
-<h1>Happy Birthday Dodo 🎉</h1>
-<div id="balloons"></div>
-<button onclick="startLetter()">one more thing 💌</button>
-</div>
-</div>
-
-<!-- LETTER -->
-<div class="screen hidden" id="letter">
-<div class="card">
-<div id="message"></div>
-<button onclick="playVoice()">only click this when you miss me 💖</button>
+<button onclick="showKnife()">done decorating</button>
 </div>
 </div>
 
 <!-- MEMORIES -->
-<div class="screen hidden" id="memories">
-<div class="card" style="display:flex;gap:15px;flex-wrap:wrap;">
+<div class="section" id="memories">
+<div class="card">
+<div class="gallery">
 
 <div class="flip" onclick="flip(this)">
-<div class="flip-inner">
-<div class="flip-front"><img src="photo1.jpg"></div>
-<div class="flip-back">baby millennium winner 🥺</div>
-</div>
-</div>
-
-<div class="flip" onclick="flip(this)">
-<div class="flip-inner">
-<div class="flip-front"><img src="photo2.jpg"></div>
-<div class="flip-back">the way you love your maa ❤️</div>
+<div class="inner">
+<div class="front"><img src="photo1.jpg"></div>
+<div class="back">baby millennium winner 🥺</div>
 </div>
 </div>
 
 <div class="flip" onclick="flip(this)">
-<div class="flip-inner">
-<div class="flip-front"><img src="photo3.jpg"></div>
-<div class="flip-back">your football world ⚽</div>
+<div class="inner">
+<div class="front"><img src="photo2.jpg"></div>
+<div class="back">the way you love your maa ❤️</div>
 </div>
 </div>
 
 <div class="flip" onclick="flip(this)">
-<div class="flip-inner">
-<div class="flip-front"><img src="photo4.jpg"></div>
-<div class="flip-back">okay but wow 😭</div>
+<div class="inner">
+<div class="front"><img src="photo3.jpg"></div>
+<div class="back">your football world ⚽</div>
 </div>
 </div>
 
 <div class="flip" onclick="flip(this)">
-<div class="flip-inner">
-<div class="flip-front"><img src="photo5.jpg"></div>
-<div class="flip-back">this is us ❤️</div>
+<div class="inner">
+<div class="front"><img src="photo4.jpg"></div>
+<div class="back">okay but wow 😭</div>
 </div>
 </div>
 
+<div class="flip" onclick="flip(this)">
+<div class="inner">
+<div class="front"><img src="photo5.jpg"></div>
+<div class="back">this is us ❤️</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- LETTER -->
+<div class="section" id="letter">
+<div class="card">
+<p id="message"></p>
+<button onclick="playVoice()">play this when you miss me 💖</button>
 </div>
 </div>
 
 <audio id="hb" src="birthday.mp3"></audio>
 <audio id="kesariya" src="kesariya.mp3"></audio>
 <audio id="voice" src="voice.mp3"></audio>
-<audio id="type" src="type.mp3"></audio>
 
 <script>
-// NAV
-function goTo(id){
-document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
-document.getElementById(id).classList.remove("hidden");
+
+// MUSIC
+function playHB(){
+document.getElementById("hb").play();
 }
 
 // DRAW
@@ -231,7 +245,7 @@ function setColor(c){color=c;}
 
 const canvas=document.getElementById("drawCanvas");
 const ctx=canvas.getContext("2d");
-canvas.width=150;canvas.height=150;
+canvas.width=120;canvas.height=120;
 
 let draw=false;
 canvas.onmousedown=()=>draw=true;
@@ -244,13 +258,18 @@ ctx.arc(e.offsetX,e.offsetY,3,0,Math.PI*2);
 ctx.fill();
 };
 
-// CUT CAKE
-function cutCake(){
+// KNIFE
+function showKnife(){
+document.getElementById("knife").style.display="block";
+}
+
+document.getElementById("knife").onclick=function(){
+document.getElementById("cakeBase").innerHTML="🍰";
 document.getElementById("hb").play();
 startConfetti();
-goTo("celebrate");
 createBalloons();
-}
+setTimeout(()=>document.getElementById("kesariya").play(),4000);
+};
 
 // BALLOONS
 function createBalloons(){
@@ -265,8 +284,7 @@ document.body.appendChild(b);
 // CONFETTI
 const c=document.getElementById("confetti");
 const ctx2=c.getContext("2d");
-c.width=window.innerWidth;
-c.height=window.innerHeight;
+c.width=window.innerWidth;c.height=window.innerHeight;
 
 let pieces=[];
 for(let i=0;i<100;i++){
@@ -287,37 +305,16 @@ if(p.y>c.height)p.y=0;
 },20);
 }
 
-// LETTER (ORIGINAL STYLE KEPT)
-const text=`happy birthday, my love ❤️
-
-i don’t even know where to start,
-because how do you explain someone who became your safe place so quickly?
+// LETTER (ORIGINAL)
+document.getElementById("message").innerHTML=`
+happy birthday, my love ❤️
 
 you’re the calm in my chaos,
 my favorite person to be goofy with.
-my go-to gossip partner.
-
-i love how you care deeply,
-how you scrunch your nose,
-how you are you.
 
 being with you feels like home.
-always has, always will.`;
-
-let i=0;
-function startLetter(){
-goTo("letter");
-document.getElementById("kesariya").play();
-function type(){
-if(i<text.length){
-document.getElementById("message").innerHTML+=text[i];
-document.getElementById("type").play();
-i++;
-setTimeout(type,30);
-}
-}
-type();
-}
+always has, always will.
+`;
 
 // VOICE
 function playVoice(){
