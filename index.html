@@ -4,296 +4,329 @@
 <meta charset="UTF-8">
 <title>For You ❤️</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
 <style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #ffd6e0, #ffeef2);
-  color: #3b2f2f;
-  overflow: hidden;
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#ffd6e0,#ffeef2);
+  color:#3b2f2f;
+  overflow:hidden;
 }
 
-/* NAVBAR */
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  padding: 15px;
-  background: rgba(255,255,255,0.5);
-  backdrop-filter: blur(10px);
-  z-index: 1000;
-}
-
-.navbar span {
-  cursor: pointer;
-  font-weight: 600;
+/* NAV */
+.navbar{
+  position:fixed; top:0; width:100%;
+  display:flex; justify-content:center; gap:40px;
+  padding:15px; background:rgba(255,255,255,0.5);
+  backdrop-filter:blur(10px); z-index:1000;
 }
 
 /* SCREEN */
-.screen {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: opacity 0.8s ease;
+.screen{
+  position:absolute; width:100%; height:100%;
+  display:flex; justify-content:center; align-items:center;
 }
-
-.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
+.hidden{display:none;}
 
 /* CARD */
-.card {
-  background: rgba(255,255,255,0.6);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 40px;
-  text-align: center;
-  max-width: 600px;
-  box-shadow: 0 0 40px rgba(255,182,193,0.2);
+.card{
+  background:rgba(255,255,255,0.7);
+  padding:40px; border-radius:20px;
+  text-align:center;
+}
+
+/* CURSIVE */
+h1{
+  font-family:'Great Vibes',cursive;
+  font-size:3rem;
 }
 
 /* BUTTON */
-button {
-  margin-top: 20px;
-  padding: 10px 22px;
-  border-radius: 20px;
-  border: none;
-  background: #ff9aa2;
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
+button{
+  margin-top:15px;
+  padding:10px 20px;
+  border:none; border-radius:20px;
+  background:#ff9aa2; color:white;
+  cursor:pointer;
 }
 
-button:hover {
-  transform: scale(1.05);
+/* CANVAS DRAW */
+#drawCanvas{
+  position:absolute;
+  width:150px; height:150px;
+  cursor:crosshair;
 }
 
-/* CAKE DRAW */
-#drawCanvas {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  cursor: crosshair;
+/* COLOR PALETTE */
+.palette span{
+  display:inline-block;
+  width:20px;height:20px;
+  border-radius:50%;margin:5px;
+  cursor:pointer;
 }
 
-/* GALLERY */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(2, 160px);
-  gap: 15px;
+/* GALLERY FLIP */
+.flip{
+  width:150px;height:150px;
+  perspective:1000px;
+}
+.flip-inner{
+  position:relative;width:100%;height:100%;
+  transition:transform 0.6s;
+  transform-style:preserve-3d;
+}
+.flip.clicked .flip-inner{
+  transform:rotateY(180deg);
+}
+.flip-front, .flip-back{
+  position:absolute;width:100%;height:100%;
+  backface-visibility:hidden;
+  border-radius:10px;
+}
+.flip-front img{
+  width:100%;height:100%;object-fit:cover;
+}
+.flip-back{
+  background:white;display:flex;
+  justify-content:center;align-items:center;
+  transform:rotateY(180deg);
+  padding:10px;font-size:12px;
 }
 
-.gallery img {
-  width: 160px;
-  height: 160px;
-  border-radius: 12px;
-  border: 2px dotted #ff9aa2;
-  cursor: pointer;
-  object-fit: cover;
-  transition: 0.3s;
+/* BALLOONS */
+.balloon{
+  position:absolute;
+  bottom:-50px;
+  width:30px;height:40px;
+  background:#ff9aa2;
+  border-radius:50%;
+  animation:float 6s infinite;
+}
+@keyframes float{
+  to{transform:translateY(-110vh);}
 }
 
-.gallery img:hover {
-  transform: scale(1.05);
-}
-
-/* POPUP */
-.popup {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  padding: 15px;
-  border-radius: 12px;
-  display: none;
-}
-
-/* VOICE CINEMATIC */
-.overlay {
-  position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(8px);
-  display:none;
-  z-index:1500;
-}
-
-.voice-active {
-  box-shadow: 0 0 40px rgba(255,182,193,0.6);
-  transform: scale(1.02);
-}
-
-.voice-btn {
-  background: linear-gradient(45deg,#ff9aa2,#ffc3a0);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% {box-shadow:0 0 0 rgba(255,154,162,0.5);}
-  50% {box-shadow:0 0 20px rgba(255,154,162,0.8);}
-  100% {box-shadow:0 0 0 rgba(255,154,162,0.5);}
-}
+/* CONFETTI */
+canvas{position:absolute;top:0;}
 </style>
 </head>
 
 <body>
 
-<div id="overlay" class="overlay"></div>
-
 <div class="navbar">
-  <span onclick="goTo('screen1')">Home</span>
-  <span onclick="goTo('screen2')">Cake</span>
-  <span onclick="goTo('screen5')">Memories</span>
-  <span onclick="goTo('screen4')">Letter</span>
+  <span onclick="goTo('home')">Home</span>
+  <span onclick="goTo('cake')">Cake</span>
+  <span onclick="goTo('memories')">Memories</span>
+  <span onclick="goTo('letter')">Letter</span>
 </div>
 
+<canvas id="confetti"></canvas>
+
 <!-- HOME -->
-<div class="screen" id="screen1">
-  <div class="card">
-    <h1>Happy Birthday ❤️</h1>
-    <p>i made something for you…</p>
-    <button onclick="goTo('screen2')">click this only if you love me</button>
-  </div>
+<div class="screen" id="home">
+<div class="card">
+<h1>Happy Birthday ❤️</h1>
+<button onclick="goTo('cake')">click this only if you love me</button>
+</div>
 </div>
 
 <!-- CAKE -->
-<div class="screen hidden" id="screen2">
-  <div class="card">
-    <h2>decorate your cake 🎂</h2>
-    <div style="position:relative;">
-      <div style="font-size:120px;">🎂</div>
-      <canvas id="drawCanvas"></canvas>
-    </div>
-    <button onclick="cutCake()">cut the cake 🎂</button>
-  </div>
+<div class="screen hidden" id="cake">
+<div class="card">
+<h2>decorate your cake 🎂</h2>
+
+<div style="position:relative;">
+<div style="font-size:120px;">🎂</div>
+<canvas id="drawCanvas"></canvas>
+</div>
+
+<div class="palette">
+<span style="background:red" onclick="setColor('red')"></span>
+<span style="background:blue" onclick="setColor('blue')"></span>
+<span style="background:green" onclick="setColor('green')"></span>
+<span style="background:purple" onclick="setColor('purple')"></span>
+<span style="background:black" onclick="setColor('black')"></span>
+</div>
+
+<button onclick="cutCake()">cut the cake 🎂</button>
+</div>
+</div>
+
+<!-- CELEBRATION -->
+<div class="screen hidden" id="celebrate">
+<div class="card">
+<h1>Happy Birthday Dodo 🎉</h1>
+<div id="balloons"></div>
+<button onclick="startLetter()">one more thing 💌</button>
+</div>
 </div>
 
 <!-- LETTER -->
-<div class="screen hidden" id="screen4">
-  <div class="card" id="letterCard">
-    <div id="message"></div>
-    <button onclick="playVoice()" class="voice-btn">
-      only click this when you really miss me 💖
-    </button>
-  </div>
+<div class="screen hidden" id="letter">
+<div class="card">
+<div id="message"></div>
+<button onclick="playVoice()">only click this when you miss me 💖</button>
+</div>
 </div>
 
 <!-- MEMORIES -->
-<div class="screen hidden" id="screen5">
-  <div class="card">
-    <div class="gallery">
-      <img src="photo1.jpg" onclick="showMsg(0)">
-      <img src="photo2.jpg" onclick="showMsg(1)">
-      <img src="photo3.jpg" onclick="showMsg(2)">
-      <img src="photo4.jpg" onclick="showMsg(3)">
-      <img src="photo5.jpg" onclick="showMsg(4)">
-    </div>
-  </div>
+<div class="screen hidden" id="memories">
+<div class="card" style="display:flex;gap:15px;flex-wrap:wrap;">
+
+<div class="flip" onclick="flip(this)">
+<div class="flip-inner">
+<div class="flip-front"><img src="photo1.jpg"></div>
+<div class="flip-back">baby millennium winner 🥺</div>
+</div>
 </div>
 
-<div id="popup" class="popup"></div>
+<div class="flip" onclick="flip(this)">
+<div class="flip-inner">
+<div class="flip-front"><img src="photo2.jpg"></div>
+<div class="flip-back">the way you love your maa ❤️</div>
+</div>
+</div>
+
+<div class="flip" onclick="flip(this)">
+<div class="flip-inner">
+<div class="flip-front"><img src="photo3.jpg"></div>
+<div class="flip-back">your football world ⚽</div>
+</div>
+</div>
+
+<div class="flip" onclick="flip(this)">
+<div class="flip-inner">
+<div class="flip-front"><img src="photo4.jpg"></div>
+<div class="flip-back">okay but wow 😭</div>
+</div>
+</div>
+
+<div class="flip" onclick="flip(this)">
+<div class="flip-inner">
+<div class="flip-front"><img src="photo5.jpg"></div>
+<div class="flip-back">this is us ❤️</div>
+</div>
+</div>
+
+</div>
+</div>
 
 <audio id="hb" src="birthday.mp3"></audio>
 <audio id="kesariya" src="kesariya.mp3"></audio>
-<audio id="type" src="type.mp3"></audio>
 <audio id="voice" src="voice.mp3"></audio>
+<audio id="type" src="type.mp3"></audio>
 
 <script>
 // NAV
 function goTo(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
+document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
 }
 
 // DRAW
+let color="red";
+function setColor(c){color=c;}
+
 const canvas=document.getElementById("drawCanvas");
 const ctx=canvas.getContext("2d");
-canvas.width=120; canvas.height=120;
+canvas.width=150;canvas.height=150;
 
-let drawing=false;
-canvas.onmousedown=()=>drawing=true;
-canvas.onmouseup=()=>drawing=false;
+let draw=false;
+canvas.onmousedown=()=>draw=true;
+canvas.onmouseup=()=>draw=false;
 canvas.onmousemove=e=>{
-  if(!drawing) return;
-  ctx.fillStyle="#ff6b81";
-  ctx.beginPath();
-  ctx.arc(e.offsetX,e.offsetY,2,0,Math.PI*2);
-  ctx.fill();
+if(!draw)return;
+ctx.fillStyle=color;
+ctx.beginPath();
+ctx.arc(e.offsetX,e.offsetY,3,0,Math.PI*2);
+ctx.fill();
 };
 
-// CUT
+// CUT CAKE
 function cutCake(){
-  document.getElementById("hb").play();
-  goTo("screen4");
-  startTyping();
+document.getElementById("hb").play();
+startConfetti();
+goTo("celebrate");
+createBalloons();
 }
 
-// LETTER
-const text=`read this slowly… 💌
+// BALLOONS
+function createBalloons(){
+for(let i=0;i<10;i++){
+let b=document.createElement("div");
+b.className="balloon";
+b.style.left=Math.random()*100+"vw";
+document.body.appendChild(b);
+}
+}
 
-happy birthday, my love ❤️
+// CONFETTI
+const c=document.getElementById("confetti");
+const ctx2=c.getContext("2d");
+c.width=window.innerWidth;
+c.height=window.innerHeight;
 
-you are my safe place,
-my favorite person,
-and my home.
+let pieces=[];
+for(let i=0;i<100;i++){
+pieces.push({x:Math.random()*c.width,y:Math.random()*c.height});
+}
 
-i love you endlessly.`;
+function startConfetti(){
+setInterval(()=>{
+ctx2.clearRect(0,0,c.width,c.height);
+ctx2.fillStyle="#ff6b81";
+pieces.forEach(p=>{
+ctx2.beginPath();
+ctx2.arc(p.x,p.y,3,0,Math.PI*2);
+ctx2.fill();
+p.y+=2;
+if(p.y>c.height)p.y=0;
+});
+},20);
+}
+
+// LETTER (ORIGINAL STYLE KEPT)
+const text=`happy birthday, my love ❤️
+
+i don’t even know where to start,
+because how do you explain someone who became your safe place so quickly?
+
+you’re the calm in my chaos,
+my favorite person to be goofy with.
+my go-to gossip partner.
+
+i love how you care deeply,
+how you scrunch your nose,
+how you are you.
+
+being with you feels like home.
+always has, always will.`;
 
 let i=0;
-function startTyping(){
-  function type(){
-    if(i<text.length){
-      document.getElementById("message").innerHTML+=text[i];
-      document.getElementById("type").play();
-      i++;
-      setTimeout(type,30);
-    }
-  }
-  type();
+function startLetter(){
+goTo("letter");
+document.getElementById("kesariya").play();
+function type(){
+if(i<text.length){
+document.getElementById("message").innerHTML+=text[i];
+document.getElementById("type").play();
+i++;
+setTimeout(type,30);
+}
+}
+type();
 }
 
-// VOICE CINEMATIC
+// VOICE
 function playVoice(){
-  const voice=document.getElementById("voice");
-  const overlay=document.getElementById("overlay");
-  const card=document.getElementById("letterCard");
-
-  overlay.style.display="block";
-  card.classList.add("voice-active");
-
-  voice.play();
-
-  voice.onended=()=>{
-    overlay.style.display="none";
-    card.classList.remove("voice-active");
-  };
+document.getElementById("voice").play();
 }
 
-// POPUPS
-const messages=[
-  "this little baby… already stealing hearts 🥺❤️",
-  "the way you love your maa is everything ❤️",
-  "this is where you shine ⚽",
-  "HOW are you this gorgeous 😭",
-  "this is us ❤️"
-];
-
-function showMsg(i){
-  let p=document.getElementById("popup");
-  p.innerHTML=messages[i];
-  p.style.display="block";
-  setTimeout(()=>p.style.display="none",2500);
+// FLIP
+function flip(el){
+el.classList.toggle("clicked");
 }
 </script>
 
