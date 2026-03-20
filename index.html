@@ -12,23 +12,42 @@ margin:0;
 font-family:'Segoe UI',sans-serif;
 background:linear-gradient(135deg,#ffd6e0,#ffeef2);
 color:#3b2f2f;
+overflow:hidden;
 }
 
-/* NAV */
+/* NAVBAR */
 .navbar{
-position:fixed; top:0; width:100%;
-display:flex; justify-content:center; gap:30px;
-padding:15px; background:rgba(255,255,255,0.6);
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:center;
+gap:30px;
+padding:15px;
+background:rgba(255,255,255,0.6);
+z-index:1000;
 }
 
-/* SECTION */
-.section{
-height:100vh;
+.navbar span{
+cursor:pointer;
+font-weight:600;
+}
+
+/* SCREEN */
+.screen{
+position:absolute;
+width:100%;
+height:100%;
 display:flex;
 justify-content:center;
 align-items:center;
 }
 
+.hidden{
+display:none;
+}
+
+/* CARD */
 .card{
 background:rgba(255,255,255,0.7);
 padding:40px;
@@ -92,9 +111,7 @@ cursor:pointer;
 }
 
 /* FLIP */
-.flip{
-perspective:1000px;
-}
+.flip{perspective:1000px;}
 .inner{
 transition:0.6s;
 transform-style:preserve-3d;
@@ -112,8 +129,8 @@ backface-visibility:hidden;
 transform:rotateY(180deg);
 background:white;
 display:flex;
-align-items:center;
 justify-content:center;
+align-items:center;
 font-size:12px;
 padding:5px;
 }
@@ -132,31 +149,34 @@ to{transform:translateY(-100vh);}
 }
 
 /* CONFETTI */
-canvas{position:absolute;top:0;}
+canvas{
+position:absolute;
+top:0;
+}
 </style>
 </head>
 
 <body>
 
 <div class="navbar">
-<a href="#home">Home</a>
-<a href="#cake">Cake</a>
-<a href="#memories">Memories</a>
-<a href="#letter">Letter</a>
+<span onclick="goTo('home')">Home</span>
+<span onclick="goTo('cake')">Cake</span>
+<span onclick="goTo('memories')">Memories</span>
+<span onclick="goTo('letter')">Letter</span>
 </div>
 
 <canvas id="confetti"></canvas>
 
 <!-- HOME -->
-<div class="section" id="home">
+<div class="screen" id="home">
 <div class="card">
 <h1>Happy Birthday ❤️</h1>
-<button onclick="playHB()">start 🎂</button>
+<button onclick="goTo('cake')">click this only if you love me</button>
 </div>
 </div>
 
 <!-- CAKE -->
-<div class="section" id="cake">
+<div class="screen hidden" id="cake">
 <div class="card">
 <h2>decorate your cake 🎂</h2>
 
@@ -177,7 +197,7 @@ canvas{position:absolute;top:0;}
 </div>
 
 <!-- MEMORIES -->
-<div class="section" id="memories">
+<div class="screen hidden" id="memories">
 <div class="card">
 <div class="gallery">
 
@@ -191,7 +211,7 @@ canvas{position:absolute;top:0;}
 <div class="flip" onclick="flip(this)">
 <div class="inner">
 <div class="front"><img src="photo2.jpeg"></div>
-<div class="back">the way you love and care for your maa ❤️</div>
+<div class="back">the way you love your maa ❤️</div>
 </div>
 </div>
 
@@ -212,7 +232,7 @@ canvas{position:absolute;top:0;}
 <div class="flip" onclick="flip(this)">
 <div class="inner">
 <div class="front"><img src="photo5.jpeg"></div>
-<div class="back">Us ❤️</div>
+<div class="back">this is us ❤️</div>
 </div>
 </div>
 
@@ -221,22 +241,23 @@ canvas{position:absolute;top:0;}
 </div>
 
 <!-- LETTER -->
-<div class="section" id="letter">
+<div class="screen hidden" id="letter">
 <div class="card">
 <p id="message"></p>
-<button onclick="playVoice()">just a tiny voice note 💖</button>
+<button onclick="playVoice()">play this when you miss me 💖</button>
 </div>
 </div>
 
 <audio id="hb" src="birthday.mp3"></audio>
 <audio id="kesariya" src="kesariya.mp3"></audio>
-<audio id="voice" src="voice.mpeg3"></audio>
+<audio id="voice" src="voice.mpeg"></audio>
 
 <script>
 
-// MUSIC
-function playHB(){
-document.getElementById("hb").play();
+// NAVIGATION
+function goTo(id){
+document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
 }
 
 // DRAW
@@ -268,7 +289,10 @@ document.getElementById("cakeBase").innerHTML="🍰";
 document.getElementById("hb").play();
 startConfetti();
 createBalloons();
-setTimeout(()=>document.getElementById("kesariya").play(),4000);
+
+setTimeout(()=>{
+document.getElementById("kesariya").play();
+},4000);
 };
 
 // BALLOONS
@@ -305,7 +329,7 @@ if(p.y>c.height)p.y=0;
 },20);
 }
 
-// LETTER (ORIGINAL)
+// LETTER
 document.getElementById("message").innerHTML=`
 happy birthday, my love ❤️
 
