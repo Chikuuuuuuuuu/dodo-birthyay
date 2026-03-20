@@ -42,7 +42,6 @@ body {
 /* title */
 h1 {
   font-size: 3rem;
-  letter-spacing: 1px;
   text-shadow: 0 0 20px rgba(255, 182, 193, 0.6);
 }
 
@@ -56,41 +55,24 @@ button {
   color: #222;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
 }
 
 button:hover {
-  transform: translateY(-2px) scale(1.05);
+  transform: scale(1.05);
 }
+
 /* cake */
 .cake {
   font-size: 80px;
   cursor: pointer;
-  transition: transform 0.3s;
 }
 
-.cake:hover {
-  transform: scale(1.1);
-}
 /* message */
 #message {
   max-width: 600px;
   line-height: 1.8;
-  font-size: 1.1rem;
-  opacity: 0.9;
 }
-/* confetti */
-canvas {
-  position: absolute;
-  top: 0;
-}
-</style>
-</head>
 
-<body>
-
-<canvas id="confetti"></canvas>
-  
 /* floating hearts */
 .heart {
   position: absolute;
@@ -104,10 +86,18 @@ canvas {
   from {transform: translateY(100vh);}
   to {transform: translateY(-10vh);}
 }
+
+/* confetti */
+canvas {
+  position: absolute;
+  top: 0;
+}
 </style>
 </head>
 
 <body>
+
+<canvas id="confetti"></canvas>
 
 <!-- floating hearts -->
 <script>
@@ -125,19 +115,20 @@ for (let i = 0; i < 20; i++) {
 <div class="screen" id="screen1">
   <div class="card">
     <h1>Happy Birthday Dodo ❤️</h1>
-    <p style="opacity:0.7;">I have made a lil something for you…</p>
-    <button onclick="nextScreen()">click this only if you love me</button>
+    <p style="opacity:0.7;">I made something soft for you…</p>
+    <button onclick="goCake()">click this only if you love me</button>
   </div>
 </div>
 
-<!-- SCREEN 2 (CAKE) -->
+<!-- SCREEN 2 -->
 <div class="screen hidden" id="screen2">
   <div class="card">
     <div class="cake" onclick="cutCake()">🎂</div>
     <p>click to cut the cake 🎂</p>
   </div>
 </div>
-<!-- SCREEN 3 (HB SONG) -->
+
+<!-- SCREEN 3 -->
 <div class="screen hidden" id="screen3">
   <div class="card">
     <h1>HAPPY BIRTHDAY ❤️</h1>
@@ -145,51 +136,53 @@ for (let i = 0; i < 20; i++) {
   </div>
 </div>
 
-<!-- SCREEN 4 (MESSAGE)-->
-<div class="screen hidden" id="screen3">
+<!-- SCREEN 4 -->
+<div class="screen hidden" id="screen4">
   <div class="card">
-    <h2>ps: you better have clicked this because you know I am awesome 😌❤️</h2>
+    <div id="message"></div>
   </div>
 </div>
 
-<audio id="music" src="kesariya.mp3"></audio>
+<audio id="hb" src="birthday.mp3"></audio>
+<audio id="kesariya" src="kesariya.mp3"></audio>
 
 <script>
-function nextScreen() {
- function goCake() {
-  screen1.classList.add("hidden");
-  screen2.classList.remove("hidden");
+// navigation
+function goCake() {
+  document.getElementById("screen1").classList.add("hidden");
+  document.getElementById("screen2").classList.remove("hidden");
 }
 
 function cutCake() {
-  screen2.classList.add("hidden");
-  screen3.classList.remove("hidden");
+  document.getElementById("screen2").classList.add("hidden");
+  document.getElementById("screen3").classList.remove("hidden");
   document.getElementById("hb").play();
 }
 
 function startLove() {
-  screen3.classList.add("hidden");
-  screen4.classList.remove("hidden");
+  document.getElementById("screen3").classList.add("hidden");
+  document.getElementById("screen4").classList.remove("hidden");
   document.getElementById("hb").pause();
   document.getElementById("kesariya").play();
   startTyping();
 }
- // typing 
+
+// typing
 const text = `happy birthday, my love ❤️
 
-I don’t even know where to start,
+i don’t even know where to start,
 because how do you explain someone who became your safe place so quickly?
 
 you’re the calm in my chaos,
 my favorite person to be goofy with.
-My go to gossip monger.
-I love how you care about things deeply,
-how you srunch your nose when you find things mildy bothering,
-how you are you — in the most effortless way.
-I wish for this birthday and every other birthday to be filled 
-with happiness and prosperity.
+my go-to gossip partner.
+
+i love how you care deeply,
+how you scrunch your nose when something mildly bothers you,
+how you are you — so effortlessly.
+
 being with you feels like home.
-always has and always will.`;
+always has, always will.`;
 
 let i = 0;
 
@@ -203,26 +196,34 @@ function startTyping() {
   }
   type();
 }
-  // confetti
+
+// confetti
 const canvas = document.getElementById("confetti");
 const ctx = canvas.getContext("2d");
+
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let pieces = [];
+
 for (let i = 0; i < 100; i++) {
-  pieces.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height});
+  pieces.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height
+  });
 }
 
 setInterval(() => {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "#ff9a9e";
-  pieces.forEach(p=>{
+
+  pieces.forEach(p => {
     ctx.beginPath();
-    ctx.arc(p.x,p.y,3,0,Math.PI*2);
+    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
     ctx.fill();
+
     p.y += 2;
-    if(p.y>canvas.height) p.y=0;
+    if (p.y > canvas.height) p.y = 0;
   });
 }, 20);
 </script>
