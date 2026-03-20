@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #0f0f1a;
+  color: white;
+  overflow: hidden;
+  text-align: center;
+}
+
+.screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 1s;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+button {
+  padding: 12px 24px;
+  border-radius: 30px;
+  border: none;
+  background: #ff6b81;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#message {
+  max-width: 600px;
+  font-size: 1.2rem;
+  line-height: 1.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="screen" id="screen1">
+  <h1>Happy Birthday ❤️</h1>
+  <button onclick="nextScreen()">click this only if you love me</button>
+</div>
+
+<div class="screen hidden" id="screen2">
+  <div id="message"></div>
+  <br>
+  <button onclick="showFinal()">one last thing 💌</button>
+</div>
+
+<div class="screen hidden" id="screen3">
+  <h2>ps: you better have clicked this because you love me 😌❤️</h2>
+</div>
+
+<script>
+function nextScreen() {
+  document.getElementById("screen1").classList.add("hidden");
+  document.getElementById("screen2").classList.remove("hidden");
+  startTyping();
+}
+
+function showFinal() {
+  document.getElementById("screen2").classList.add("hidden");
+  document.getElementById("screen3").classList.remove("hidden");
+}
+
+const text = `happy birthday, my love ❤️
+
+i don’t even know where to start,
+because how do you explain someone who became your safe place so quietly?
+
+you’re the calm in my chaos,
+the softness i didn’t know i needed,
+and somehow… my favorite person to be goofy with.
+
+being with you feels like home.
+
+i’d still choose you. always.`;
+
+let i = 0;
+
+function startTyping() {
+  function type() {
+    if (i < text.length) {
+      document.getElementById("message").innerHTML += text.charAt(i);
+      i++;
+      setTimeout(type, 40);
+    }
+  }
+  type();
+}
+</script>
+
+</body>
+</html>
