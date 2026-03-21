@@ -7,361 +7,318 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
-body{
-margin:0;
-font-family:'Poppins',sans-serif;
-background:linear-gradient(135deg,#ffd6e0,#fff0f5);
-color:#4b3b3b;
-overflow-x:hidden;
+
+/* ================= GLOBAL ================= */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg,#ffd6e0,#fff0f5);
+  color: #4b3b3b;
+  overflow-x: hidden;
 }
 
-/* FLOATING CUTIES */
-.cute{
-position:fixed;
-font-size:20px;
-animation:float 8s linear infinite;
-opacity:0.7;
-}
-@keyframes float{
-from{transform:translateY(100vh);}
-to{transform:translateY(-10vh);}
+/* ================= HERO ================= */
+.hero {
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* HERO */
-.hero{
-height:80vh;
-display:flex;
-justify-content:center;
-align-items:center;
+.hero-card {
+  width: 70%;
+  padding: 50px;
+  border-radius: 20px;
+  background: #fff6ef;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
 
-.hero-card{
-background:#fff6ef;
-width:70%;
-padding:50px;
-border-radius:20px;
-text-align:center;
-box-shadow:0 20px 40px rgba(0,0,0,0.1);
+h1 {
+  font-family: 'Great Vibes', cursive;
+  font-size: 52px;
 }
 
-h1{
-font-family:'Great Vibes',cursive;
-font-size:50px;
+/* ================= SECTION ================= */
+.section {
+  padding: 80px 0;
+  display: flex;
+  justify-content: center;
 }
 
-/* SECTION */
-.section{
-padding:80px 0;
-display:flex;
-justify-content:center;
+.card {
+  width: 60%;
+  padding: 40px;
+  border-radius: 20px;
+  background: #fff6ef;
+  text-align: center;
 }
 
-.card{
-background:#fff6ef;
-padding:40px;
-border-radius:20px;
-width:60%;
-text-align:center;
+/* ================= CAKE ================= */
+#cakeBox {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: auto;
 }
 
-/* CAKE */
-#cakeBox{
-position:relative;
-width:150px;height:150px;
-margin:auto;
+#drawCanvas {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 120px;
+  height: 120px;
 }
 
-#drawCanvas{
-position:absolute;
-top:15px;
-left:15px;
-width:120px;height:120px;
+#knife {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  font-size: 30px;
+  cursor: grab;
 }
 
-#knife{
-position:absolute;
-top:40px;
-left:0;
-font-size:30px;
-cursor:grab;
+#cutLine {
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  height: 3px;
+  width: 0;
+  background: #8b0000;
 }
 
-#cutLine{
-position:absolute;
-top:70px;
-left:20px;
-width:0;
-height:3px;
-background:#8b0000;
-border-radius:5px;
+/* ================= GALLERY ================= */
+.gallery {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-/* FLOWERS */
-.flower{
-position:fixed;
-top:-20px;
-font-size:20px;
-animation:fall 5s linear infinite;
-}
-@keyframes fall{
-to{transform:translateY(100vh);}
+.gallery img {
+  width: 150px;
+  height: 150px;
+  border-radius: 12px;
+  object-fit: cover;
 }
 
-/* GALLERY */
-.gallery{
-display:flex;
-gap:20px;
-flex-wrap:wrap;
-justify-content:center;
+/* ================= ANIMATIONS ================= */
+.balloon {
+  position: absolute;
+  bottom: -50px;
+  width: 30px;
+  height: 40px;
+  background: #ff9aa2;
+  border-radius: 50%;
+  animation: rise 6s infinite;
 }
 
-.gallery img{
-width:150px;height:150px;
-border-radius:12px;
-object-fit:cover;
-border:2px dotted #ff9aa2;
+@keyframes rise {
+  to { transform: translateY(-100vh); }
 }
 
-/* BALLOONS */
-.balloon{
-position:absolute;
-bottom:-50px;
-width:30px;height:40px;
-background:#ff9aa2;
-border-radius:50%;
-animation:rise 6s infinite;
+.flower {
+  position: fixed;
+  top: -20px;
+  animation: fall 5s linear infinite;
 }
-@keyframes rise{
-to{transform:translateY(-100vh);}
+
+@keyframes fall {
+  to { transform: translateY(100vh); }
 }
+
 </style>
 </head>
 
 <body>
 
-<script>
-const emojis=["🐱","🐶","💖","✨","🌸"];
-for(let i=0;i<20;i++){
-let e=document.createElement("div");
-e.className="cute";
-e.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
-e.style.left=Math.random()*100+"vw";
-e.style.animationDuration=(5+Math.random()*5)+"s";
-document.body.appendChild(e);
-}
-</script>
-
 <!-- HERO -->
 <div class="hero">
-<div class="hero-card">
-<h1>Happy Birthday 💖</h1>
-<p>i made something special for you</p>
-<button onclick="startExperience()">Start</button>
-</div>
+  <div class="hero-card">
+    <h1>Happy Birthday 💖</h1>
+    <button onclick="startExperience()">Start</button>
+  </div>
 </div>
 
 <!-- CAKE -->
 <div class="section">
-<div class="card">
-<h2>decorate your cake 🎂</h2>
+  <div class="card">
+    <h2>Decorate your cake 🎂</h2>
 
-<div id="cakeBox">
-<div id="cakeBase" style="font-size:120px;">🎂</div>
-<canvas id="drawCanvas"></canvas>
-<div id="cutLine"></div>
-<div id="knife">🔪</div>
-</div>
+    <div id="cakeBox">
+      <div id="cakeBase" style="font-size:120px;">🎂</div>
+      <canvas id="drawCanvas"></canvas>
+      <div id="cutLine"></div>
+      <div id="knife">🔪</div>
+    </div>
 
-<div>
-<button onclick="setTool('red')">❤️</button>
-<button onclick="setTool('white')">🤍</button>
-<button onclick="setTool('chocolate')">🍫</button>
-<button onclick="setTool('strawberry')">🍓</button>
-<button onclick="setTool('sparkle')">✨</button>
-</div>
-
-</div>
+    <div>
+      <button onclick="setTool('red')">❤️</button>
+      <button onclick="setTool('white')">🤍</button>
+      <button onclick="setTool('chocolate')">🍫</button>
+      <button onclick="setTool('strawberry')">🍓</button>
+      <button onclick="setTool('sparkle')">✨</button>
+    </div>
+  </div>
 </div>
 
 <!-- MEMORIES -->
 <div class="section">
-<div class="card">
-<h2>our moments 💖</h2>
-<div class="gallery">
-<img src="image01.jpeg">
-<img src="image02.jpeg">
-<img src="image03.jpeg">
-<img src="image04.jpeg">
-<img src="image05.jpeg">
-</div>
-</div>
+  <div class="card">
+    <h2>Memories 💖</h2>
+    <div class="gallery">
+      <img src="image01.jpeg">
+      <img src="image02.jpeg">
+      <img src="image03.jpeg">
+      <img src="image04.jpeg">
+      <img src="image05.jpeg">
+    </div>
+  </div>
 </div>
 
 <!-- LETTER -->
 <div class="section">
-<div class="card">
-<p id="message"></p>
-<button onclick="playVoice()">play this when you miss me 💖</button>
-</div>
+  <div class="card">
+    <p id="message"></p>
+    <button onclick="playVoice()">Play Voice 💌</button>
+  </div>
 </div>
 
 <audio id="hb" src="birthday.mp3"></audio>
 <audio id="kesariya" src="kesariya.mp3"></audio>
 <audio id="voice" src="voice.mpeg"></audio>
-<audio id="type" src="type.mp3"></audio>
 
 <script>
 
-// START
+/* ================= STATE ================= */
+let tool = "red";
+let drawing = false;
+
+/* ================= START ================= */
 function startExperience(){
-document.getElementById("hb").play();
+  document.getElementById("hb").play();
 }
 
-// DRAW
-let tool="red";
-function setTool(t){tool=t;}
+/* ================= DRAW ================= */
+const canvas = document.getElementById("drawCanvas");
+const ctx = canvas.getContext("2d");
+canvas.width = 120;
+canvas.height = 120;
 
-const canvas=document.getElementById("drawCanvas");
-const ctx=canvas.getContext("2d");
-canvas.width=120;canvas.height=120;
+function setTool(t){ tool = t; }
 
-let drawing=false;
-canvas.onmousedown=()=>{drawing=true; ctx.beginPath();}
-canvas.onmouseup=()=>drawing=false;
+canvas.onmousedown = () => { drawing = true; ctx.beginPath(); }
+canvas.onmouseup = () => drawing = false;
 
-canvas.onmousemove=e=>{
-if(!drawing)return;
-let x=e.offsetX,y=e.offsetY;
+canvas.onmousemove = e => {
+  if(!drawing) return;
 
-if(tool==="red"){
-ctx.fillStyle="#ff4d6d";
-ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
-}
+  let x = e.offsetX;
+  let y = e.offsetY;
 
-if(tool==="white"){
-ctx.fillStyle="#fff";
-ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
-}
+  if(tool==="red"){
+    ctx.fillStyle="#ff4d6d";
+    ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill();
+  }
 
-if(tool==="chocolate"){
-ctx.strokeStyle="#5a2d0c";
-ctx.lineWidth=2;
-ctx.lineTo(x,y);
-ctx.stroke();
-ctx.beginPath();
-ctx.moveTo(x,y);
-}
+  if(tool==="white"){
+    ctx.fillStyle="#fff";
+    ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill();
+  }
 
-if(tool==="sparkle"){
-ctx.fillStyle="#ffd700";
-ctx.fillRect(x,y,2,2);
-}
+  if(tool==="chocolate"){
+    ctx.strokeStyle="#5a2d0c";
+    ctx.lineWidth=2;
+    ctx.lineTo(x,y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x,y);
+  }
+
+  if(tool==="sparkle"){
+    ctx.fillStyle="#ffd700";
+    ctx.fillRect(x,y,2,2);
+  }
 };
 
-canvas.onclick=e=>{
-if(tool==="strawberry"){
-ctx.font="14px Arial";
-ctx.fillText("🍓",e.offsetX-5,e.offsetY+5);
-}
+canvas.onclick = e => {
+  if(tool==="strawberry"){
+    ctx.fillText("🍓", e.offsetX, e.offsetY);
+  }
 };
 
-// KNIFE CUT
-let knife=document.getElementById("knife");
-let cutting=false;
+/* ================= KNIFE ================= */
+let knife = document.getElementById("knife");
+let cutting = false;
 
-knife.onmousedown=()=>cutting=true;
-document.onmouseup=()=>cutting=false;
+knife.onmousedown = () => cutting = true;
+document.onmouseup = () => cutting = false;
 
-document.onmousemove=e=>{
-if(!cutting)return;
+document.onmousemove = e => {
+  if(!cutting) return;
 
-let box=document.getElementById("cakeBox").getBoundingClientRect();
-let x=e.clientX-box.left;
-let y=e.clientY-box.top;
+  let box = document.getElementById("cakeBox").getBoundingClientRect();
+  let x = e.clientX - box.left;
 
-knife.style.left=x+"px";
-knife.style.top=y+"px";
+  knife.style.left = x + "px";
+  document.getElementById("cutLine").style.width = x + "px";
 
-if(x>30){
-document.getElementById("cutLine").style.width=x+"px";
-}
-
-if(x>100){
-cutting=false;
-cutCake();
-}
+  if(x > 100) performCut();
 };
 
-// CUT
-function cutCake(){
-let hb=document.getElementById("hb");
-hb.pause();
-
-document.getElementById("cakeBase").innerHTML="🍰";
-
-createFlowers();
-createBalloons();
-
-let k=document.getElementById("kesariya");
-k.play();
+/* ================= CUT ================= */
+function performCut(){
+  document.getElementById("cakeBase").innerHTML = "🍰";
+  document.getElementById("hb").pause();
+  createBalloons();
+  createFlowers();
+  document.getElementById("kesariya").play();
 }
 
-// FLOWERS
-function createFlowers(){
-for(let i=0;i<20;i++){
-let f=document.createElement("div");
-f.className="flower";
-f.innerHTML="🌸";
-f.style.left=Math.random()*100+"vw";
-document.body.appendChild(f);
-}
-}
-
-// BALLOONS
+/* ================= EFFECTS ================= */
 function createBalloons(){
-for(let i=0;i<10;i++){
-let b=document.createElement("div");
-b.className="balloon";
-b.style.left=Math.random()*100+"vw";
-document.body.appendChild(b);
+  for(let i=0;i<10;i++){
+    let b=document.createElement("div");
+    b.className="balloon";
+    b.style.left=Math.random()*100+"vw";
+    document.body.appendChild(b);
+  }
 }
+
+function createFlowers(){
+  for(let i=0;i<20;i++){
+    let f=document.createElement("div");
+    f.className="flower";
+    f.innerHTML="🌸";
+    f.style.left=Math.random()*100+"vw";
+    document.body.appendChild(f);
+  }
 }
 
-// LETTER
-const text=`happy birthday, my love ❤️
-
-you’re the calm in my chaos,
-my favorite person,
-and my home.
-
-i love you endlessly.`;
-
-let i=0;
+/* ================= LETTER ================= */
+const text = "happy birthday my love ❤️";
+let i = 0;
 
 function typeLetter(){
-let msg=document.getElementById("message");
-function type(){
-if(i<text.length){
-msg.innerHTML+=text[i];
-i++;
-setTimeout(type,30);
-}
-}
-type();
+  let el = document.getElementById("message");
+  function type(){
+    if(i<text.length){
+      el.innerHTML+=text[i];
+      i++;
+      setTimeout(type,30);
+    }
+  }
+  type();
 }
 
-window.addEventListener("scroll",()=>{
-let pos=document.getElementById("message").getBoundingClientRect().top;
-if(pos<400 && i===0){
-typeLetter();
-}
-});
+window.onload = typeLetter;
 
-// VOICE
+/* ================= VOICE ================= */
 function playVoice(){
-document.getElementById("kesariya").pause();
-document.getElementById("voice").play();
+  document.getElementById("kesariya").pause();
+  document.getElementById("voice").play();
 }
+
 </script>
 
 </body>
