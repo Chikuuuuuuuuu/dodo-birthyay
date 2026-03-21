@@ -2,74 +2,66 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For You ❤️</title>
+<title>For You 💖</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
 body{
 margin:0;
-font-family:'Segoe UI',sans-serif;
-background:linear-gradient(135deg,#ffd6e0,#ffeef2);
-color:#3b2f2f;
-overflow:hidden;
+font-family:'Poppins',sans-serif;
+background:linear-gradient(135deg,#ffd6e0,#fff0f5);
+color:#4b3b3b;
+overflow-x:hidden;
 }
 
-/* NAVBAR */
-.navbar{
+/* FLOATING CUTIES */
+.cute{
 position:fixed;
-top:0;
-width:100%;
-display:flex;
-justify-content:center;
-gap:30px;
-padding:15px;
-background:rgba(255,255,255,0.6);
-z-index:1000;
+font-size:20px;
+animation:float 8s linear infinite;
+opacity:0.7;
+}
+@keyframes float{
+from{transform:translateY(100vh);}
+to{transform:translateY(-10vh);}
 }
 
-.navbar span{
-cursor:pointer;
-font-weight:600;
-}
-
-/* SCREEN */
-.screen{
-position:absolute;
-width:100%;
-height:100%;
+/* HERO */
+.hero{
+height:80vh;
 display:flex;
 justify-content:center;
 align-items:center;
 }
 
-.hidden{
-display:none;
-}
-
-/* CARD */
-.card{
-background:rgba(255,255,255,0.7);
-padding:40px;
+.hero-card{
+background:#fff6ef;
+width:70%;
+padding:50px;
 border-radius:20px;
 text-align:center;
+box-shadow:0 20px 40px rgba(0,0,0,0.1);
 }
 
-/* TITLE */
 h1{
 font-family:'Great Vibes',cursive;
-font-size:3rem;
+font-size:50px;
 }
 
-/* BUTTON */
-button{
-margin-top:15px;
-padding:10px 20px;
-border:none;
+/* SECTION */
+.section{
+padding:80px 0;
+display:flex;
+justify-content:center;
+}
+
+.card{
+background:#fff6ef;
+padding:40px;
 border-radius:20px;
-background:#ff9aa2;
-color:white;
-cursor:pointer;
+width:60%;
+text-align:center;
 }
 
 /* CAKE */
@@ -86,53 +78,48 @@ left:15px;
 width:120px;height:120px;
 }
 
-/* PALETTE */
-.palette span{
-display:inline-block;
-width:20px;height:20px;
-border-radius:50%;
-margin:5px;
-cursor:pointer;
+#knife{
+position:absolute;
+top:40px;
+left:0;
+font-size:30px;
+cursor:grab;
+}
+
+#cutLine{
+position:absolute;
+top:70px;
+left:20px;
+width:0;
+height:3px;
+background:#8b0000;
+border-radius:5px;
+}
+
+/* FLOWERS */
+.flower{
+position:fixed;
+top:-20px;
+font-size:20px;
+animation:fall 5s linear infinite;
+}
+@keyframes fall{
+to{transform:translateY(100vh);}
 }
 
 /* GALLERY */
 .gallery{
-display:grid;
-grid-template-columns:repeat(2,150px);
-gap:15px;
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+justify-content:center;
 }
 
 .gallery img{
 width:150px;height:150px;
+border-radius:12px;
 object-fit:cover;
-border-radius:10px;
 border:2px dotted #ff9aa2;
-cursor:pointer;
-}
-
-/* FLIP */
-.flip{perspective:1000px;}
-.inner{
-transition:0.6s;
-transform-style:preserve-3d;
-position:relative;
-}
-.flip.clicked .inner{
-transform:rotateY(180deg);
-}
-.front,.back{
-position:absolute;
-width:100%;height:100%;
-backface-visibility:hidden;
-}
-.back{
-transform:rotateY(180deg);
-background:white;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:12px;
-padding:5px;
 }
 
 /* BALLOONS */
@@ -142,106 +129,76 @@ bottom:-50px;
 width:30px;height:40px;
 background:#ff9aa2;
 border-radius:50%;
-animation:float 6s infinite;
+animation:rise 6s infinite;
 }
-@keyframes float{
+@keyframes rise{
 to{transform:translateY(-100vh);}
-}
-
-/* CONFETTI */
-canvas{
-position:absolute;
-top:0;
 }
 </style>
 </head>
 
 <body>
 
-<div class="navbar">
-<span onclick="goTo('home')">Home</span>
-<span onclick="goTo('cake')">Cake</span>
-<span onclick="goTo('memories')">Memories</span>
-<span onclick="goTo('letter')">Letter</span>
-</div>
+<script>
+const emojis=["🐱","🐶","💖","✨","🌸"];
+for(let i=0;i<20;i++){
+let e=document.createElement("div");
+e.className="cute";
+e.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
+e.style.left=Math.random()*100+"vw";
+e.style.animationDuration=(5+Math.random()*5)+"s";
+document.body.appendChild(e);
+}
+</script>
 
-<canvas id="confetti"></canvas>
-
-<!-- HOME -->
-<div class="screen" id="home">
-<div class="card">
-<h1>Happy Birthday ❤️</h1>
-<button onclick="goTo('cake')">click this only if you love me</button>
+<!-- HERO -->
+<div class="hero">
+<div class="hero-card">
+<h1>Happy Birthday 💖</h1>
+<p>i made something special for you</p>
+<button onclick="startExperience()">Start</button>
 </div>
 </div>
 
 <!-- CAKE -->
-<div class="screen hidden" id="cake">
+<div class="section">
 <div class="card">
 <h2>decorate your cake 🎂</h2>
 
 <div id="cakeBox">
 <div id="cakeBase" style="font-size:120px;">🎂</div>
 <canvas id="drawCanvas"></canvas>
-<div id="knife" style="display:none;position:absolute;top:50px;left:50px;font-size:30px;cursor:pointer;">🔪</div>
+<div id="cutLine"></div>
+<div id="knife">🔪</div>
 </div>
 
-<div class="palette">
-<span style="background:red" onclick="setColor('red')"></span>
-<span style="background:blue" onclick="setColor('blue')"></span>
-<span style="background:black" onclick="setColor('black')"></span>
+<div>
+<button onclick="setTool('red')">❤️</button>
+<button onclick="setTool('white')">🤍</button>
+<button onclick="setTool('chocolate')">🍫</button>
+<button onclick="setTool('strawberry')">🍓</button>
+<button onclick="setTool('sparkle')">✨</button>
 </div>
 
-<button onclick="showKnife()">done decorating</button>
 </div>
 </div>
 
 <!-- MEMORIES -->
-<div class="screen hidden" id="memories">
+<div class="section">
 <div class="card">
+<h2>our moments 💖</h2>
 <div class="gallery">
-
-<div class="flip" onclick="flip(this)">
-<div class="inner">
-<div class="front"><img src="image01.jpeg"></div>
-<div class="back">baby millennium winner 🥺</div>
-</div>
-</div>
-
-<div class="flip" onclick="flip(this)">
-<div class="inner">
-<div class="front"><img src="image02.jpeg"></div>
-<div class="back">the way you love your maa ❤️</div>
-</div>
-</div>
-
-<div class="flip" onclick="flip(this)">
-<div class="inner">
-<div class="front"><img src="image03.jpeg"></div>
-<div class="back">your football world ⚽</div>
-</div>
-</div>
-
-<div class="flip" onclick="flip(this)">
-<div class="inner">
-<div class="front"><img src="image04.jpeg"></div>
-<div class="back">okay but wow 😭</div>
-</div>
-</div>
-
-<div class="flip" onclick="flip(this)">
-<div class="inner">
-<div class="front"><img src="image05.jpeg"></div>
-<div class="back">this is us ❤️</div>
-</div>
-</div>
-
+<img src="image01.jpeg">
+<img src="image02.jpeg">
+<img src="image03.jpeg">
+<img src="image04.jpeg">
+<img src="image05.jpeg">
 </div>
 </div>
 </div>
 
 <!-- LETTER -->
-<div class="screen hidden" id="letter">
+<div class="section">
 <div class="card">
 <p id="message"></p>
 <button onclick="playVoice()">play this when you miss me 💖</button>
@@ -251,49 +208,114 @@ top:0;
 <audio id="hb" src="birthday.mp3"></audio>
 <audio id="kesariya" src="kesariya.mp3"></audio>
 <audio id="voice" src="voice.mpeg"></audio>
+<audio id="type" src="type.mp3"></audio>
 
 <script>
 
-// NAVIGATION
-function goTo(id){
-document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
-document.getElementById(id).classList.remove("hidden");
+// START
+function startExperience(){
+document.getElementById("hb").play();
 }
 
 // DRAW
-let color="red";
-function setColor(c){color=c;}
+let tool="red";
+function setTool(t){tool=t;}
 
 const canvas=document.getElementById("drawCanvas");
 const ctx=canvas.getContext("2d");
 canvas.width=120;canvas.height=120;
 
-let draw=false;
-canvas.onmousedown=()=>draw=true;
-canvas.onmouseup=()=>draw=false;
-canvas.onmousemove=e=>{
-if(!draw)return;
-ctx.fillStyle=color;
-ctx.beginPath();
-ctx.arc(e.offsetX,e.offsetY,3,0,Math.PI*2);
-ctx.fill();
-};
+let drawing=false;
+canvas.onmousedown=()=>{drawing=true; ctx.beginPath();}
+canvas.onmouseup=()=>drawing=false;
 
-// KNIFE
-function showKnife(){
-document.getElementById("knife").style.display="block";
+canvas.onmousemove=e=>{
+if(!drawing)return;
+let x=e.offsetX,y=e.offsetY;
+
+if(tool==="red"){
+ctx.fillStyle="#ff4d6d";
+ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
 }
 
-document.getElementById("knife").onclick=function(){
+if(tool==="white"){
+ctx.fillStyle="#fff";
+ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
+}
+
+if(tool==="chocolate"){
+ctx.strokeStyle="#5a2d0c";
+ctx.lineWidth=2;
+ctx.lineTo(x,y);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(x,y);
+}
+
+if(tool==="sparkle"){
+ctx.fillStyle="#ffd700";
+ctx.fillRect(x,y,2,2);
+}
+};
+
+canvas.onclick=e=>{
+if(tool==="strawberry"){
+ctx.font="14px Arial";
+ctx.fillText("🍓",e.offsetX-5,e.offsetY+5);
+}
+};
+
+// KNIFE CUT
+let knife=document.getElementById("knife");
+let cutting=false;
+
+knife.onmousedown=()=>cutting=true;
+document.onmouseup=()=>cutting=false;
+
+document.onmousemove=e=>{
+if(!cutting)return;
+
+let box=document.getElementById("cakeBox").getBoundingClientRect();
+let x=e.clientX-box.left;
+let y=e.clientY-box.top;
+
+knife.style.left=x+"px";
+knife.style.top=y+"px";
+
+if(x>30){
+document.getElementById("cutLine").style.width=x+"px";
+}
+
+if(x>100){
+cutting=false;
+cutCake();
+}
+};
+
+// CUT
+function cutCake(){
+let hb=document.getElementById("hb");
+hb.pause();
+
 document.getElementById("cakeBase").innerHTML="🍰";
-document.getElementById("hb").play();
-startConfetti();
+
+createFlowers();
 createBalloons();
 
-setTimeout(()=>{
-document.getElementById("kesariya").play();
-},4000);
-};
+let k=document.getElementById("kesariya");
+k.play();
+}
+
+// FLOWERS
+function createFlowers(){
+for(let i=0;i<20;i++){
+let f=document.createElement("div");
+f.className="flower";
+f.innerHTML="🌸";
+f.style.left=Math.random()*100+"vw";
+document.body.appendChild(f);
+}
+}
 
 // BALLOONS
 function createBalloons(){
@@ -305,49 +327,40 @@ document.body.appendChild(b);
 }
 }
 
-// CONFETTI
-const c=document.getElementById("confetti");
-const ctx2=c.getContext("2d");
-c.width=window.innerWidth;c.height=window.innerHeight;
-
-let pieces=[];
-for(let i=0;i<100;i++){
-pieces.push({x:Math.random()*c.width,y:Math.random()*c.height});
-}
-
-function startConfetti(){
-setInterval(()=>{
-ctx2.clearRect(0,0,c.width,c.height);
-ctx2.fillStyle="#ff6b81";
-pieces.forEach(p=>{
-ctx2.beginPath();
-ctx2.arc(p.x,p.y,3,0,Math.PI*2);
-ctx2.fill();
-p.y+=2;
-if(p.y>c.height)p.y=0;
-});
-},20);
-}
-
 // LETTER
-document.getElementById("message").innerHTML=`
-happy birthday, my love ❤️
+const text=`happy birthday, my love ❤️
 
 you’re the calm in my chaos,
-my favorite person to be goofy with.
+my favorite person,
+and my home.
 
-being with you feels like home.
-always has, always will.
-`;
+i love you endlessly.`;
+
+let i=0;
+
+function typeLetter(){
+let msg=document.getElementById("message");
+function type(){
+if(i<text.length){
+msg.innerHTML+=text[i];
+i++;
+setTimeout(type,30);
+}
+}
+type();
+}
+
+window.addEventListener("scroll",()=>{
+let pos=document.getElementById("message").getBoundingClientRect().top;
+if(pos<400 && i===0){
+typeLetter();
+}
+});
 
 // VOICE
 function playVoice(){
+document.getElementById("kesariya").pause();
 document.getElementById("voice").play();
-}
-
-// FLIP
-function flip(el){
-el.classList.toggle("clicked");
 }
 </script>
 
