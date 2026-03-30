@@ -6,7 +6,6 @@
 <title>Happy Birthday Dodo 💖</title>
 
 <link rel="stylesheet" href="style.css">
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Dancing+Script&display=swap" rel="stylesheet">
 
 <style>
@@ -63,7 +62,7 @@ border-radius:10px;
 
 /* letter */
 #letter{
-background:rgba(255,255,255,0.8);
+background:rgba(255,255,255,0.85);
 padding:20px;
 border-radius:20px;
 width:70%;
@@ -72,15 +71,22 @@ font-family:'Dancing Script';
 font-size:24px;
 }
 
-/* kids image */
-.kids{
-width:200px;
-border-radius:20px;
+/* confetti */
+.confetti{
+position:fixed;
+width:8px;
+height:8px;
+top:-10px;
+animation:fall linear forwards;
 }
 
-/* cake positioning fix */
+@keyframes fall{
+to{transform:translateY(100vh) rotate(360deg);}
+}
+
+/* cake size */
 .cake-container{
-transform:scale(4);
+transform:scale(3.5);
 margin-top:40px;
 }
 </style>
@@ -96,16 +102,24 @@ margin-top:40px;
 <!-- SCREEN 1 -->
 <div class="screen active" id="s1">
 <h1>happy birthday dodo 💖</h1>
-<img src="happy birthday.jfif" class="kids">
 <button onclick="next(2)">start 🎁</button>
 </div>
 
-<!-- SCREEN 2 (YOUR CAKE) -->
+<!-- SCREEN 2 (CAKE) -->
 <div class="screen" id="s2">
 <h1>make a wish & blow candles 🎂</h1>
 
 <div class="cake-container">
-  <div class="cake" id="cake"></div>
+  <div class="cake" id="cake">
+    <div class="plate"></div>
+    <div class="layer layer-bottom"></div>
+    <div class="layer layer-middle"></div>
+    <div class="layer layer-top"></div>
+    <div class="icing"></div>
+    <div class="drip drip1"></div>
+    <div class="drip drip2"></div>
+    <div class="drip drip3"></div>
+  </div>
 </div>
 
 <p id="status">blow 🎤</p>
@@ -136,6 +150,9 @@ function next(n){
 document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
 document.getElementById("s"+n).classList.add("active");
 
+/* stop birthday song when leaving cake */
+document.getElementById("birthday").pause();
+
 if(n===2){
 setupCandles();
 startMic();
@@ -146,7 +163,7 @@ document.getElementById("bgmusic").play();
 }
 }
 
-/* ADD CANDLES ON YOUR CAKE */
+/* ADD CANDLES */
 function setupCandles(){
 let cake=document.getElementById("cake");
 
@@ -154,19 +171,21 @@ for(let i=0;i<6;i++){
 let c=document.createElement("div");
 c.className="candle";
 c.style.left=(i*6+10)+"px";
-c.style.top="-5px";
+c.style.top="-8px";
 cake.appendChild(c);
 }
 }
 
 /* MIC DETECTION */
 async function startMic(){
+try{
 const stream=await navigator.mediaDevices.getUserMedia({audio:true});
 const ctx=new AudioContext();
 const analyser=ctx.createAnalyser();
 const source=ctx.createMediaStreamSource(stream);
 
 source.connect(analyser);
+
 const data=new Uint8Array(analyser.frequencyBinCount);
 
 function detect(){
@@ -180,13 +199,37 @@ return;
 requestAnimationFrame(detect);
 }
 detect();
+
+}catch(e){
+console.log("mic blocked");
+}
 }
 
+/* CONFETTI */
+function confetti(){
+for(let i=0;i<60;i++){
+let c=document.createElement("div");
+c.className="confetti";
+
+c.style.left=Math.random()*100+"vw";
+c.style.background=`hsl(${Math.random()*360},100%,70%)`;
+c.style.animationDuration=(2+Math.random()*2)+"s";
+
+document.body.appendChild(c);
+
+setTimeout(()=>c.remove(),3000);
+}
+}
+
+/* BLOW */
 function blow(){
 document.querySelectorAll(".candle").forEach(c=>c.classList.add("blown"));
 document.getElementById("status").innerText="YAY DODO 🎉";
 
+document.getElementById("birthday").currentTime=0;
 document.getElementById("birthday").play();
+
+confetti();
 
 setTimeout(()=>next(3),1500);
 }
@@ -204,11 +247,17 @@ let i=0;
 function showLetter(){
 let el=document.getElementById("letter");
 
+document.getElementById("voice").pause();
+document.getElementById("voice").currentTime=0;
+
 function type(){
 if(i<text.length){
 el.innerHTML+=text[i];
-document.getElementById("typing").currentTime=0;
-document.getElementById("typing").play();
+
+let t=document.getElementById("typing");
+t.currentTime=0;
+t.play();
+
 i++;
 setTimeout(type,40);
 }else{
