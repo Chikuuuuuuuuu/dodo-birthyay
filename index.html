@@ -75,9 +75,9 @@ justify-content:center;
 gap:10px;
 }
 .gallery img{
-width:90px;
-height:90px;
-border-radius:10px;
+width:140px;
+height:140px;
+border-radius:12px;
 }
 
 /* letter */
@@ -140,25 +140,28 @@ to{transform:translateY(100vh);}
 </div>
 
 <!-- SCREEN 4 -->
-<div class="screen" id="s4">
+<div class="screen" id="s4" style="background:url('image05.jpeg') center/cover;">
 <div id="letter"></div>
+<button id="nextBtn" onclick="goToVoice()" style="display:none;">next 💌</button>
 </div>
 
 <!-- SCREEN 5 -->
 <div class="screen" id="s5">
 <h1>for you 💖</h1>
-<p>listen till the end 🎧</p>
+<button onclick="playVoice()" style="font-size:30px;">🎤</button>
+<p>tap to listen 🎧</p>
 </div>
 
 <script>
-
 /* NAV */
 function next(n){
 document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
 document.getElementById("s"+n).classList.add("active");
 
-/* stop birthday song */
+/* stop birthday when leaving cake */
+if(n !== 2){
 document.getElementById("birthday").pause();
+}
 
 if(n===2){
 setupCandles();
@@ -166,27 +169,22 @@ startMic();
 }
 
 if(n===4){
+document.getElementById("nextBtn").style.display="none";
 showLetter();
 
-/* play kesariya */
+/* start kesariya */
 let bg = document.getElementById("bgmusic");
 bg.currentTime = 0;
 bg.play();
-
-/* after kesariya ends */
-bg.onended = () => {
-next(5);
-
-setTimeout(()=>{
-document.getElementById("voice").play();
-},500);
-};
 }
 }
 
 /* candles */
 function setupCandles(){
 let cake=document.getElementById("cake");
+
+/* clear old candles */
+cake.innerHTML = "🎂";
 
 for(let i=0;i<4;i++){
 let c=document.createElement("div");
@@ -227,7 +225,7 @@ console.log("mic blocked");
 
 /* confetti */
 function confetti(){
-for(let i=0;i<40;i++){
+for(let i=0;i<50;i++){
 let c=document.createElement("div");
 c.className="confetti";
 c.style.left=Math.random()*100+"vw";
@@ -244,13 +242,14 @@ function blow(){
 document.querySelectorAll(".candle").forEach(c=>c.classList.add("blown"));
 document.getElementById("status").innerText="YAY DODO 🎉";
 
-document.getElementById("birthday").currentTime=0;
-document.getElementById("birthday").play();
+let song = document.getElementById("birthday");
+song.currentTime=0;
+song.play();
 
 confetti();
 
-/* longer moment */
-setTimeout(()=>next(3),5000);
+/* WAIT 15 SECONDS */
+setTimeout(()=>next(3),15000);
 }
 
 /* letter */
@@ -265,6 +264,8 @@ let i=0;
 
 function showLetter(){
 let el=document.getElementById("letter");
+el.innerHTML="";
+i=0;
 
 function type(){
 if(i<text.length){
@@ -276,9 +277,25 @@ t.play();
 
 i++;
 setTimeout(type,40);
+}else{
+/* show next button after typing */
+document.getElementById("nextBtn").style.display="block";
 }
 }
 type();
+}
+
+/* go to voice screen */
+function goToVoice(){
+document.getElementById("bgmusic").pause();
+next(5);
+}
+
+/* play voice */
+function playVoice(){
+let v = document.getElementById("voice");
+v.currentTime=0;
+v.play();
 }
 
 </script>
