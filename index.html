@@ -2,16 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday 💖</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins&family=Pixelify+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins&family=Dancing+Script&family=Pixelify+Sans&display=swap" rel="stylesheet">
 
 <style>
 body{
 margin:0;
-background:#ffeef2;
 font-family:'Poppins';
+background:#ffeef2;
 overflow:hidden;
+cursor:url('https://cur.cursors-4u.net/cursors/cur-2/cur116.cur'),auto;
 }
 
 /* SCREENS */
@@ -22,161 +24,177 @@ height:100%;
 display:flex;
 justify-content:center;
 align-items:center;
+flex-direction:column;
 opacity:0;
 transition:1s;
 pointer-events:none;
 }
 .active{opacity:1;pointer-events:auto;}
 
-.card{
-background:white;
-padding:40px;
-border-radius:20px;
-text-align:center;
-width:70%;
-}
-
-/* FLOAT BG */
-.bg{
+/* FLOATING BG */
+.float{
 position:fixed;
 animation:float 8s linear infinite;
-opacity:0.5;
+opacity:0.6;
+font-size:20px;
 }
 @keyframes float{
 from{transform:translateY(100vh);}
 to{transform:translateY(-10vh);}
 }
 
-/* CAKE MIC */
+/* INTRO */
+h1{
+font-family:'Dancing Script';
+font-size:60px;
+margin:0;
+}
+
+/* BUTTON */
+button{
+padding:12px 25px;
+border:none;
+border-radius:25px;
+background:#ff9aa2;
+color:white;
+cursor:pointer;
+margin-top:20px;
+}
+
+/* CAKE */
 .cake{
-width:200px;height:120px;
+width:200px;
+height:120px;
 background:pink;
-position:relative;
-margin:auto;
 border-radius:10px;
+position:relative;
+margin-top:20px;
 }
 .candle{
-width:6px;height:20px;
+width:6px;
+height:20px;
 background:red;
 position:absolute;
 top:-20px;
 }
 .blown{opacity:0.2}
 
-/* DRAW CAKE */
-#cakeBox{position:relative;width:150px;height:150px;margin:auto;}
-#drawCanvas{position:absolute;top:15px;left:15px;width:120px;height:120px;}
-#knife{position:absolute;top:40px;left:0;font-size:30px;}
-#cutLine{position:absolute;top:70px;height:3px;background:red;width:0;}
-
-.gallery img{
-width:100px;height:100px;border-radius:10px;
+/* ENVELOPE */
+.envelope{
+position:fixed;
+bottom:-200px;
+left:50%;
+transform:translateX(-50%);
+width:250px;
+height:160px;
+background:#ff9aa2;
+border-radius:10px;
+transition:1s;
+cursor:pointer;
+}
+.envelope.open{
+bottom:20%;
+height:300px;
+background:white;
 }
 
-/* LETTER */
-#message{
-font-family:'Great Vibes';
-font-size:28px;
+#letterText{
+padding:20px;
+font-family:'Dancing Script';
+font-size:22px;
+opacity:0;
+transition:1s;
+}
+
+/* CONFETTI */
+.confetti{
+position:fixed;
+width:10px;height:10px;
+background:red;
+top:-10px;
+animation:fall 3s linear forwards;
+}
+@keyframes fall{
+to{transform:translateY(100vh) rotate(360deg);}
 }
 </style>
 </head>
 
 <body>
 
+<audio id="bgm" src="birthday.mp3" loop></audio>
+
 <script>
+/* FLOATING ELEMENTS */
 const cute=["🐶","💖","✨","🌸"];
-for(let i=0;i<20;i++){
+for(let i=0;i<25;i++){
 let e=document.createElement("div");
-e.className="bg";
+e.className="float";
 e.innerHTML=cute[Math.floor(Math.random()*cute.length)];
 e.style.left=Math.random()*100+"vw";
+e.style.animationDuration=(5+Math.random()*5)+"s";
 document.body.appendChild(e);
 }
 </script>
 
 <!-- SCREEN 1 -->
 <div class="screen active" id="s1">
-<div class="card">
 <h1>Happy Birthday 💖</h1>
-<button onclick="next(2)">start 🎁</button>
-</div>
+<p>for someone really special</p>
+<button onclick="start()">open surprise 🎁</button>
 </div>
 
-<!-- SCREEN 2 (MIC CAKE) -->
+<!-- SCREEN 2 -->
 <div class="screen" id="s2">
-<div class="card">
-<h2>blow the candles 🎂</h2>
+<h2>make a wish & blow candles 🎂</h2>
 <div class="cake" id="cake"></div>
 <p id="status">blow into mic 🎤</p>
 </div>
-</div>
 
-<!-- SCREEN 3 (DRAW CAKE) -->
-<div class="screen" id="s3">
-<div class="card">
-<h2>decorate cake 🎂</h2>
-
-<div id="cakeBox">
-<div id="cakeBase" style="font-size:100px;">🎂</div>
-<canvas id="drawCanvas"></canvas>
-<div id="knife">🔪</div>
-<div id="cutLine"></div>
-</div>
-
-<button onclick="setTool('red')">❤️</button>
-<button onclick="setTool('white')">🤍</button>
-</div>
-</div>
-
-<!-- SCREEN 4 -->
-<div class="screen" id="s4">
-<div class="card">
-<h2>memories 💖</h2>
-<div class="gallery">
-<img src="img1.jpg">
-<img src="img2.jpg">
-</div>
-<button onclick="next(5)">next 💌</button>
-</div>
-</div>
-
-<!-- SCREEN 5 -->
-<div class="screen" id="s5">
-<div class="card">
-<p id="message"></p>
-</div>
+<!-- ENVELOPE -->
+<div class="envelope" id="envelope" onclick="openLetter()">
+<div id="letterText"></div>
 </div>
 
 <script>
+
+/* START */
+function start(){
+next(2);
+document.getElementById("bgm").play();
+}
 
 /* NAV */
 function next(n){
 document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
 document.getElementById("s"+n).classList.add("active");
 
-if(n===2) startMic();
-if(n===5) startTyping();
+if(n===2){
+createCandles();
+startMic();
+}
 }
 
-/* MIC BLOW */
+/* CANDLES */
 function createCandles(){
 const cake=document.getElementById("cake");
-for(let i=0;i<5;i++){
+cake.innerHTML="";
+for(let i=0;i<6;i++){
 let c=document.createElement("div");
 c.className="candle";
-c.style.left=(20*i+30)+"px";
+c.style.left=(25*i+20)+"px";
 cake.appendChild(c);
 }
 }
-createCandles();
 
+/* MIC */
 async function startMic(){
 const stream=await navigator.mediaDevices.getUserMedia({audio:true});
 const ctx=new AudioContext();
 const analyser=ctx.createAnalyser();
 const source=ctx.createMediaStreamSource(stream);
-source.connect(analyser);
 
+source.connect(analyser);
 const data=new Uint8Array(analyser.frequencyBinCount);
 
 function detect(){
@@ -184,9 +202,7 @@ analyser.getByteFrequencyData(data);
 let avg=data.reduce((a,b)=>a+b)/data.length;
 
 if(avg>60){
-document.querySelectorAll(".candle").forEach(c=>c.classList.add("blown"));
-document.getElementById("status").innerText="YAY 🎉";
-setTimeout(()=>next(3),1500);
+blowCandles();
 return;
 }
 requestAnimationFrame(detect);
@@ -194,34 +210,54 @@ requestAnimationFrame(detect);
 detect();
 }
 
-/* DRAW */
-let tool="red";
-function setTool(t){tool=t;}
+/* BLOW */
+function blowCandles(){
+document.querySelectorAll(".candle").forEach(c=>c.classList.add("blown"));
+document.getElementById("status").innerText="YAYYY 🎉";
 
-const canvas=document.getElementById("drawCanvas");
-const ctx=canvas.getContext("2d");
-canvas.width=120;canvas.height=120;
+confettiBlast();
 
-canvas.onmousemove=e=>{
-if(e.buttons!==1)return;
-ctx.fillStyle="#ff4d6d";
-ctx.beginPath();
-ctx.arc(e.offsetX,e.offsetY,3,0,Math.PI*2);
-ctx.fill();
-};
+setTimeout(()=>{
+document.getElementById("envelope").style.bottom="20%";
+},1200);
+}
+
+/* CONFETTI */
+function confettiBlast(){
+for(let i=0;i<60;i++){
+let c=document.createElement("div");
+c.className="confetti";
+c.style.left=Math.random()*100+"vw";
+c.style.background=`hsl(${Math.random()*360},100%,70%)`;
+c.style.animationDuration=(2+Math.random()*2)+"s";
+document.body.appendChild(c);
+
+setTimeout(()=>c.remove(),3000);
+}
+}
 
 /* LETTER */
 const text=`happy birthday my love 💖
-you are everything to me.`;
+
+you are my safe place,
+my chaos, my calm.
+
+i'm so lucky to have you.`;
 
 let i=0;
-function startTyping(){
-let el=document.getElementById("message");
+
+function openLetter(){
+let env=document.getElementById("envelope");
+env.classList.add("open");
+
+let el=document.getElementById("letterText");
+el.style.opacity=1;
+
 function type(){
 if(i<text.length){
 el.innerHTML+=text[i];
 i++;
-setTimeout(type,30);
+setTimeout(type,40);
 }
 }
 type();
