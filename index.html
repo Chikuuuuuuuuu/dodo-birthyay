@@ -3,265 +3,242 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday 💖</title>
+<title>Happy Birthday Dodo 💖</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins&family=Dancing+Script&family=Pixelify+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins&family=Pixelify+Sans&display=swap" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <style>
-body{
-margin:0;
-font-family:'Poppins';
-background:#ffeef2;
-overflow:hidden;
-cursor:url('https://cur.cursors-4u.net/cursors/cur-2/cur116.cur'),auto;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* SCREENS */
-.screen{
-position:absolute;
-width:100%;
-height:100%;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-opacity:0;
-transition:1s;
-pointer-events:none;
-}
-.active{opacity:1;pointer-events:auto;}
-
-/* FLOATING BG */
-.float{
-position:fixed;
-animation:float 8s linear infinite;
-opacity:0.6;
-font-size:20px;
-}
-@keyframes float{
-from{transform:translateY(100vh);}
-to{transform:translateY(-10vh);}
+.cake-container {
+  position: relative;
+  transform: scale(6);
+  margin-top: 60px;
 }
 
-/* INTRO */
-h1{
-font-family:'Dancing Script';
-font-size:60px;
-margin:0;
+.cake {
+  position: relative;
 }
 
-/* BUTTON */
-button{
-padding:12px 25px;
-border:none;
-border-radius:25px;
-background:#ff9aa2;
-color:white;
-cursor:pointer;
-margin-top:20px;
+.candle {
+  width: 6px;
+  height: 20px;
+  position: absolute;
+  top: -20px;
 }
 
-/* CAKE */
-.cake{
-width:200px;
-height:120px;
-background:pink;
-border-radius:10px;
-position:relative;
-margin-top:20px;
-}
-.candle{
-width:6px;
-height:20px;
-background:red;
-position:absolute;
-top:-20px;
-}
-.blown{opacity:0.2}
-
-/* ENVELOPE */
-.envelope{
-position:fixed;
-bottom:-200px;
-left:50%;
-transform:translateX(-50%);
-width:250px;
-height:160px;
-background:#ff9aa2;
-border-radius:10px;
-transition:1s;
-cursor:pointer;
-}
-.envelope.open{
-bottom:20%;
-height:300px;
-background:white;
-}
-
-#letterText{
-padding:20px;
-font-family:'Dancing Script';
-font-size:22px;
-opacity:0;
-transition:1s;
-}
-
-/* CONFETTI */
-.confetti{
-position:fixed;
-width:10px;height:10px;
-background:red;
-top:-10px;
-animation:fall 3s linear forwards;
-}
-@keyframes fall{
-to{transform:translateY(100vh) rotate(360deg);}
+.blown {
+  opacity: 0.2;
 }
 </style>
+
 </head>
 
 <body>
 
-<audio id="bgm" src="birthday.mp3" loop></audio>
+<audio id="birthdaySong" src="birthday.mp3"></audio>
+<audio id="voiceNote" src="voice.mpeg"></audio>
+
+<div id="wrapper">
+
+    <div class="content">
+
+        <!-- LEFT -->
+        <div class="left">
+
+            <div class="title">
+                <h1 class="happy">
+                    <span>H</span><span>a</span><span>p</span><span>p</span><span>y</span>
+                </h1>
+                <h1 class="birthday">
+                    <span>B</span><span>i</span><span>r</span><span>t</span><span>h</span><span>d</span><span>a</span><span>y</span>
+                </h1>
+            </div>
+
+            <div class="date__of__birth"><span></span></div>
+
+            <div class="btn">
+                <button id="btn__letter">
+                    <div class="mail">
+                        Click Here Dodo 💌
+                        <i class="fa-regular fa-envelope"></i>
+                    </div>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- RIGHT (CAKE) -->
+        <div class="right">
+            <div class="container">
+
+                <div id="birthdayText">
+                    <h2>Happy Birthday, Dodo 🎂</h2>
+                    <p id="status">blow candles 🎤</p>
+                </div>
+
+                <div class="cake-container">
+                    <div class="cake" id="cake"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- LETTER -->
+    <div class="boxMail">
+        <i class="fa-solid fa-xmark"></i>
+        <div class="boxMail-container">
+
+            <div class="card1">
+                <h4>To Dodo 💖</h4>
+            </div>
+
+            <div class="card2">
+                <div class="card2-content">
+                    <h3>Happy Birthday 💖</h3>
+                    <h2 id="letterText"></h2>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
 
 <script>
-/* FLOATING ELEMENTS */
-const cute=["🐶","💖","✨","🌸"];
-for(let i=0;i<25;i++){
-let e=document.createElement("div");
-e.className="float";
-e.innerHTML=cute[Math.floor(Math.random()*cute.length)];
-e.style.left=Math.random()*100+"vw";
-e.style.animationDuration=(5+Math.random()*5)+"s";
-document.body.appendChild(e);
+
+/* DATE */
+let datetxt = "27 May";
+let charArrDate = datetxt.split('');
+let currentIndex = 0;
+
+let date__of__birth = document.querySelector(".date__of__birth span");
+
+setInterval(() => {
+    if (currentIndex < charArrDate.length) {
+        date__of__birth.textContent += charArrDate[currentIndex];
+        currentIndex++;
+    }
+}, 100);
+
+
+/* LETTER TEXT */
+let text = "Happy Birthday Dodo 💖 You are my safe place, my chaos, my calm. I’m so lucky to have you.";
+let i = 0;
+
+let mailBox = document.querySelector('.mail');
+let boxmail = document.querySelector('.boxMail');
+let close = document.querySelector('.fa-xmark');
+let letter = document.getElementById("letterText");
+
+mailBox.onclick = function () {
+
+    boxmail.classList.add('active');
+
+    // stop song
+    document.getElementById("birthdaySong").pause();
+
+    // play voice
+    let voice = document.getElementById("voiceNote");
+    voice.currentTime = 0;
+    voice.play();
+
+    i = 0;
+    letter.textContent = "";
+
+    let interval = setInterval(() => {
+        if (i < text.length) {
+            letter.textContent += text[i];
+            i++;
+        } else clearInterval(interval);
+    }, 40);
+};
+
+close.onclick = () => boxmail.classList.remove('active');
+
+
+/* CAKE */
+const cake = document.getElementById("cake");
+
+const colors = ["green-candle","purple-candle","blue-candle","yellow-candle"];
+
+function createCandles(count){
+  cake.innerHTML="";
+  for(let i=0;i<count;i++){
+    const c=document.createElement("div");
+    c.classList.add("candle");
+
+    const color=colors[Math.floor(Math.random()*colors.length)];
+    c.classList.add(color);
+
+    c.style.left=(i*12+10)+"px";
+    cake.appendChild(c);
+  }
 }
-</script>
+createCandles(6);
 
-<!-- SCREEN 1 -->
-<div class="screen active" id="s1">
-<h1>Happy Birthday 💖</h1>
-<p>for someone really special</p>
-<button onclick="start()">open surprise 🎁</button>
-</div>
-
-<!-- SCREEN 2 -->
-<div class="screen" id="s2">
-<h2>make a wish & blow candles 🎂</h2>
-<div class="cake" id="cake"></div>
-<p id="status">blow into mic 🎤</p>
-</div>
-
-<!-- ENVELOPE -->
-<div class="envelope" id="envelope" onclick="openLetter()">
-<div id="letterText"></div>
-</div>
-
-<script>
-
-/* START */
-function start(){
-next(2);
-document.getElementById("bgm").play();
-}
-
-/* NAV */
-function next(n){
-document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-document.getElementById("s"+n).classList.add("active");
-
-if(n===2){
-createCandles();
-startMic();
-}
-}
-
-/* CANDLES */
-function createCandles(){
-const cake=document.getElementById("cake");
-cake.innerHTML="";
-for(let i=0;i<6;i++){
-let c=document.createElement("div");
-c.className="candle";
-c.style.left=(25*i+20)+"px";
-cake.appendChild(c);
-}
-}
 
 /* MIC */
 async function startMic(){
-const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-const ctx=new AudioContext();
-const analyser=ctx.createAnalyser();
-const source=ctx.createMediaStreamSource(stream);
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    const ctx = new AudioContext();
+    const analyser = ctx.createAnalyser();
+    const source = ctx.createMediaStreamSource(stream);
 
-source.connect(analyser);
-const data=new Uint8Array(analyser.frequencyBinCount);
+    source.connect(analyser);
 
-function detect(){
-analyser.getByteFrequencyData(data);
-let avg=data.reduce((a,b)=>a+b)/data.length;
+    const data = new Uint8Array(analyser.frequencyBinCount);
 
-if(avg>60){
-blowCandles();
-return;
-}
-requestAnimationFrame(detect);
-}
-detect();
-}
+    function detect(){
+      analyser.getByteFrequencyData(data);
 
-/* BLOW */
-function blowCandles(){
-document.querySelectorAll(".candle").forEach(c=>c.classList.add("blown"));
-document.getElementById("status").innerText="YAYYY 🎉";
+      let avg = data.reduce((a,b)=>a+b)/data.length;
 
-confettiBlast();
+      if(avg>60){
+        blow();
+        return;
+      }
 
-setTimeout(()=>{
-document.getElementById("envelope").style.bottom="20%";
-},1200);
+      requestAnimationFrame(detect);
+    }
+
+    detect();
+
+  }catch(e){
+    console.log("mic error", e);
+  }
 }
 
-/* CONFETTI */
-function confettiBlast(){
-for(let i=0;i<60;i++){
-let c=document.createElement("div");
-c.className="confetti";
-c.style.left=Math.random()*100+"vw";
-c.style.background=`hsl(${Math.random()*360},100%,70%)`;
-c.style.animationDuration=(2+Math.random()*2)+"s";
-document.body.appendChild(c);
+function blow(){
+  document.querySelectorAll(".candle").forEach(c=>{
+    c.classList.add("blown");
+  });
 
-setTimeout(()=>c.remove(),3000);
+  document.getElementById("status").innerText="YAY DODO 🎉";
+
+  // play birthday song
+  let song = document.getElementById("birthdaySong");
+  song.currentTime = 0;
+  song.play();
+
+  setTimeout(()=>{
+    document.querySelector('.mail').click();
+  },1500);
 }
-}
 
-/* LETTER */
-const text=`happy birthday my love 💖
-
-you are my safe place,
-my chaos, my calm.
-
-i'm so lucky to have you.`;
-
-let i=0;
-
-function openLetter(){
-let env=document.getElementById("envelope");
-env.classList.add("open");
-
-let el=document.getElementById("letterText");
-el.style.opacity=1;
-
-function type(){
-if(i<text.length){
-el.innerHTML+=text[i];
-i++;
-setTimeout(type,40);
-}
-}
-type();
-}
+startMic();
 
 </script>
 
