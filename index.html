@@ -2,321 +2,229 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For You 💖</title>
+<title>Happy Birthday 💖</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins&family=Pixelify+Sans&display=swap" rel="stylesheet">
 
 <style>
-
-/* ================= GLOBAL ================= */
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg,#ffd6e0,#fff0f5);
-  color: #4b3b3b;
-  overflow-x: hidden;
+body{
+margin:0;
+background:#ffeef2;
+font-family:'Poppins';
+overflow:hidden;
 }
 
-/* ================= HERO ================= */
-.hero {
-  height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* SCREENS */
+.screen{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+opacity:0;
+transition:1s;
+pointer-events:none;
+}
+.active{opacity:1;pointer-events:auto;}
+
+.card{
+background:white;
+padding:40px;
+border-radius:20px;
+text-align:center;
+width:70%;
 }
 
-.hero-card {
-  width: 70%;
-  padding: 50px;
-  border-radius: 20px;
-  background: #fff6ef;
-  text-align: center;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+/* FLOAT BG */
+.bg{
+position:fixed;
+animation:float 8s linear infinite;
+opacity:0.5;
+}
+@keyframes float{
+from{transform:translateY(100vh);}
+to{transform:translateY(-10vh);}
 }
 
-h1 {
-  font-family: 'Great Vibes', cursive;
-  font-size: 52px;
+/* CAKE MIC */
+.cake{
+width:200px;height:120px;
+background:pink;
+position:relative;
+margin:auto;
+border-radius:10px;
+}
+.candle{
+width:6px;height:20px;
+background:red;
+position:absolute;
+top:-20px;
+}
+.blown{opacity:0.2}
+
+/* DRAW CAKE */
+#cakeBox{position:relative;width:150px;height:150px;margin:auto;}
+#drawCanvas{position:absolute;top:15px;left:15px;width:120px;height:120px;}
+#knife{position:absolute;top:40px;left:0;font-size:30px;}
+#cutLine{position:absolute;top:70px;height:3px;background:red;width:0;}
+
+.gallery img{
+width:100px;height:100px;border-radius:10px;
 }
 
-/* ================= SECTION ================= */
-.section {
-  padding: 80px 0;
-  display: flex;
-  justify-content: center;
+/* LETTER */
+#message{
+font-family:'Great Vibes';
+font-size:28px;
 }
-
-.card {
-  width: 60%;
-  padding: 40px;
-  border-radius: 20px;
-  background: #fff6ef;
-  text-align: center;
-}
-
-/* ================= CAKE ================= */
-#cakeBox {
-  position: relative;
-  width: 150px;
-  height: 150px;
-  margin: auto;
-}
-
-#drawCanvas {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  width: 120px;
-  height: 120px;
-}
-
-#knife {
-  position: absolute;
-  top: 40px;
-  left: 0;
-  font-size: 30px;
-  cursor: grab;
-}
-
-#cutLine {
-  position: absolute;
-  top: 70px;
-  left: 20px;
-  height: 3px;
-  width: 0;
-  background: #8b0000;
-}
-
-/* ================= GALLERY ================= */
-.gallery {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.gallery img {
-  width: 150px;
-  height: 150px;
-  border-radius: 12px;
-  object-fit: cover;
-}
-
-/* ================= ANIMATIONS ================= */
-.balloon {
-  position: absolute;
-  bottom: -50px;
-  width: 30px;
-  height: 40px;
-  background: #ff9aa2;
-  border-radius: 50%;
-  animation: rise 6s infinite;
-}
-
-@keyframes rise {
-  to { transform: translateY(-100vh); }
-}
-
-.flower {
-  position: fixed;
-  top: -20px;
-  animation: fall 5s linear infinite;
-}
-
-@keyframes fall {
-  to { transform: translateY(100vh); }
-}
-
 </style>
 </head>
 
 <body>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-card">
-    <h1>Happy Birthday 💖</h1>
-    <button onclick="startExperience()">Start</button>
-  </div>
+<script>
+const cute=["🐶","💖","✨","🌸"];
+for(let i=0;i<20;i++){
+let e=document.createElement("div");
+e.className="bg";
+e.innerHTML=cute[Math.floor(Math.random()*cute.length)];
+e.style.left=Math.random()*100+"vw";
+document.body.appendChild(e);
+}
+</script>
+
+<!-- SCREEN 1 -->
+<div class="screen active" id="s1">
+<div class="card">
+<h1>Happy Birthday 💖</h1>
+<button onclick="next(2)">start 🎁</button>
+</div>
 </div>
 
-<!-- CAKE -->
-<div class="section">
-  <div class="card">
-    <h2>Decorate your cake 🎂</h2>
-
-    <div id="cakeBox">
-      <div id="cakeBase" style="font-size:120px;">🎂</div>
-      <canvas id="drawCanvas"></canvas>
-      <div id="cutLine"></div>
-      <div id="knife">🔪</div>
-    </div>
-
-    <div>
-      <button onclick="setTool('red')">❤️</button>
-      <button onclick="setTool('white')">🤍</button>
-      <button onclick="setTool('chocolate')">🍫</button>
-      <button onclick="setTool('strawberry')">🍓</button>
-      <button onclick="setTool('sparkle')">✨</button>
-    </div>
-  </div>
+<!-- SCREEN 2 (MIC CAKE) -->
+<div class="screen" id="s2">
+<div class="card">
+<h2>blow the candles 🎂</h2>
+<div class="cake" id="cake"></div>
+<p id="status">blow into mic 🎤</p>
+</div>
 </div>
 
-<!-- MEMORIES -->
-<div class="section">
-  <div class="card">
-    <h2>Memories 💖</h2>
-    <div class="gallery">
-      <img src="image01.jpeg">
-      <img src="image02.jpeg">
-      <img src="image03.jpeg">
-      <img src="image04.jpeg">
-      <img src="image05.jpeg">
-    </div>
-  </div>
+<!-- SCREEN 3 (DRAW CAKE) -->
+<div class="screen" id="s3">
+<div class="card">
+<h2>decorate cake 🎂</h2>
+
+<div id="cakeBox">
+<div id="cakeBase" style="font-size:100px;">🎂</div>
+<canvas id="drawCanvas"></canvas>
+<div id="knife">🔪</div>
+<div id="cutLine"></div>
 </div>
 
-<!-- LETTER -->
-<div class="section">
-  <div class="card">
-    <p id="message"></p>
-    <button onclick="playVoice()">Play Voice 💌</button>
-  </div>
+<button onclick="setTool('red')">❤️</button>
+<button onclick="setTool('white')">🤍</button>
+</div>
 </div>
 
-<audio id="hb" src="birthday.mp3"></audio>
-<audio id="kesariya" src="kesariya.mp3"></audio>
-<audio id="voice" src="voice.mpeg"></audio>
+<!-- SCREEN 4 -->
+<div class="screen" id="s4">
+<div class="card">
+<h2>memories 💖</h2>
+<div class="gallery">
+<img src="img1.jpg">
+<img src="img2.jpg">
+</div>
+<button onclick="next(5)">next 💌</button>
+</div>
+</div>
+
+<!-- SCREEN 5 -->
+<div class="screen" id="s5">
+<div class="card">
+<p id="message"></p>
+</div>
+</div>
 
 <script>
 
-/* ================= STATE ================= */
-let tool = "red";
-let drawing = false;
+/* NAV */
+function next(n){
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById("s"+n).classList.add("active");
 
-/* ================= START ================= */
-function startExperience(){
-  document.getElementById("hb").play();
+if(n===2) startMic();
+if(n===5) startTyping();
 }
 
-/* ================= DRAW ================= */
-const canvas = document.getElementById("drawCanvas");
-const ctx = canvas.getContext("2d");
-canvas.width = 120;
-canvas.height = 120;
+/* MIC BLOW */
+function createCandles(){
+const cake=document.getElementById("cake");
+for(let i=0;i<5;i++){
+let c=document.createElement("div");
+c.className="candle";
+c.style.left=(20*i+30)+"px";
+cake.appendChild(c);
+}
+}
+createCandles();
 
-function setTool(t){ tool = t; }
+async function startMic(){
+const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+const ctx=new AudioContext();
+const analyser=ctx.createAnalyser();
+const source=ctx.createMediaStreamSource(stream);
+source.connect(analyser);
 
-canvas.onmousedown = () => { drawing = true; ctx.beginPath(); }
-canvas.onmouseup = () => drawing = false;
+const data=new Uint8Array(analyser.frequencyBinCount);
 
-canvas.onmousemove = e => {
-  if(!drawing) return;
+function detect(){
+analyser.getByteFrequencyData(data);
+let avg=data.reduce((a,b)=>a+b)/data.length;
 
-  let x = e.offsetX;
-  let y = e.offsetY;
+if(avg>60){
+document.querySelectorAll(".candle").forEach(c=>c.classList.add("blown"));
+document.getElementById("status").innerText="YAY 🎉";
+setTimeout(()=>next(3),1500);
+return;
+}
+requestAnimationFrame(detect);
+}
+detect();
+}
 
-  if(tool==="red"){
-    ctx.fillStyle="#ff4d6d";
-    ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill();
-  }
+/* DRAW */
+let tool="red";
+function setTool(t){tool=t;}
 
-  if(tool==="white"){
-    ctx.fillStyle="#fff";
-    ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill();
-  }
+const canvas=document.getElementById("drawCanvas");
+const ctx=canvas.getContext("2d");
+canvas.width=120;canvas.height=120;
 
-  if(tool==="chocolate"){
-    ctx.strokeStyle="#5a2d0c";
-    ctx.lineWidth=2;
-    ctx.lineTo(x,y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x,y);
-  }
-
-  if(tool==="sparkle"){
-    ctx.fillStyle="#ffd700";
-    ctx.fillRect(x,y,2,2);
-  }
+canvas.onmousemove=e=>{
+if(e.buttons!==1)return;
+ctx.fillStyle="#ff4d6d";
+ctx.beginPath();
+ctx.arc(e.offsetX,e.offsetY,3,0,Math.PI*2);
+ctx.fill();
 };
 
-canvas.onclick = e => {
-  if(tool==="strawberry"){
-    ctx.fillText("🍓", e.offsetX, e.offsetY);
-  }
-};
+/* LETTER */
+const text=`happy birthday my love 💖
+you are everything to me.`;
 
-/* ================= KNIFE ================= */
-let knife = document.getElementById("knife");
-let cutting = false;
-
-knife.onmousedown = () => cutting = true;
-document.onmouseup = () => cutting = false;
-
-document.onmousemove = e => {
-  if(!cutting) return;
-
-  let box = document.getElementById("cakeBox").getBoundingClientRect();
-  let x = e.clientX - box.left;
-
-  knife.style.left = x + "px";
-  document.getElementById("cutLine").style.width = x + "px";
-
-  if(x > 100) performCut();
-};
-
-/* ================= CUT ================= */
-function performCut(){
-  document.getElementById("cakeBase").innerHTML = "🍰";
-  document.getElementById("hb").pause();
-  createBalloons();
-  createFlowers();
-  document.getElementById("kesariya").play();
+let i=0;
+function startTyping(){
+let el=document.getElementById("message");
+function type(){
+if(i<text.length){
+el.innerHTML+=text[i];
+i++;
+setTimeout(type,30);
 }
-
-/* ================= EFFECTS ================= */
-function createBalloons(){
-  for(let i=0;i<10;i++){
-    let b=document.createElement("div");
-    b.className="balloon";
-    b.style.left=Math.random()*100+"vw";
-    document.body.appendChild(b);
-  }
 }
-
-function createFlowers(){
-  for(let i=0;i<20;i++){
-    let f=document.createElement("div");
-    f.className="flower";
-    f.innerHTML="🌸";
-    f.style.left=Math.random()*100+"vw";
-    document.body.appendChild(f);
-  }
-}
-
-/* ================= LETTER ================= */
-const text = "happy birthday my love ❤️";
-let i = 0;
-
-function typeLetter(){
-  let el = document.getElementById("message");
-  function type(){
-    if(i<text.length){
-      el.innerHTML+=text[i];
-      i++;
-      setTimeout(type,30);
-    }
-  }
-  type();
-}
-
-window.onload = typeLetter;
-
-/* ================= VOICE ================= */
-function playVoice(){
-  document.getElementById("kesariya").pause();
-  document.getElementById("voice").play();
+type();
 }
 
 </script>
