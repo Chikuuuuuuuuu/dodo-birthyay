@@ -10,37 +10,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins&family=Pixelify+Sans&display=swap" rel="stylesheet">
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<style>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.cake-container {
-  position: relative;
-  transform: scale(6);
-  margin-top: 60px;
-}
-
-.cake {
-  position: relative;
-}
-
-.candle {
-  width: 6px;
-  height: 20px;
-  position: absolute;
-  top: -20px;
-}
-
-.blown {
-  opacity: 0.2;
-}
-</style>
-
 </head>
 
 <body>
@@ -48,194 +17,108 @@
 <audio id="birthdaySong" src="birthday.mp3"></audio>
 <audio id="voiceNote" src="voice.mpeg"></audio>
 
-<div id="wrapper">
+<div class="main">
 
-    <div class="content">
+    <h1>make a wish & blow candles 🎂</h1>
 
-        <!-- LEFT -->
-        <div class="left">
-
-            <div class="title">
-                <h1 class="happy">
-                    <span>H</span><span>a</span><span>p</span><span>p</span><span>y</span>
-                </h1>
-                <h1 class="birthday">
-                    <span>B</span><span>i</span><span>r</span><span>t</span><span>h</span><span>d</span><span>a</span><span>y</span>
-                </h1>
-            </div>
-
-            <div class="date__of__birth"><span></span></div>
-
-            <div class="btn">
-                <button id="btn__letter">
-                    <div class="mail">
-                        Click Here Dodo 💌
-                        <i class="fa-regular fa-envelope"></i>
-                    </div>
-                </button>
-            </div>
-
-        </div>
-
-        <!-- RIGHT (CAKE) -->
-        <div class="right">
-            <div class="container">
-
-                <div id="birthdayText">
-                    <h2>Happy Birthday, Dodo 🎂</h2>
-                    <p id="status">blow candles 🎤</p>
-                </div>
-
-                <div class="cake-container">
-                    <div class="cake" id="cake"></div>
-                </div>
-
-            </div>
-        </div>
-
+    <div class="cake-wrapper">
+        <div class="cake" id="cake"></div>
     </div>
 
-    <!-- LETTER -->
-    <div class="boxMail">
-        <i class="fa-solid fa-xmark"></i>
-        <div class="boxMail-container">
+    <p id="status">blow into mic 🎤</p>
 
-            <div class="card1">
-                <h4>To Dodo 💖</h4>
-            </div>
+    <button onclick="openLetter()">open 💌</button>
 
-            <div class="card2">
-                <div class="card2-content">
-                    <h3>Happy Birthday 💖</h3>
-                    <h2 id="letterText"></h2>
-                </div>
-            </div>
+</div>
 
-        </div>
-    </div>
-
+<div class="letter" id="letter">
+    <p id="text"></p>
 </div>
 
 <script>
 
-/* DATE */
-let datetxt = "27 May";
-let charArrDate = datetxt.split('');
-let currentIndex = 0;
+/* LETTER */
+const message = `happy birthday my love 💖
+you are my safe place,
+my chaos, my calm.
+i’m so lucky to have you.`;
 
-let date__of__birth = document.querySelector(".date__of__birth span");
-
-setInterval(() => {
-    if (currentIndex < charArrDate.length) {
-        date__of__birth.textContent += charArrDate[currentIndex];
-        currentIndex++;
-    }
-}, 100);
-
-
-/* LETTER TEXT */
-let text = "Happy Birthday Dodo 💖 You are my safe place, my chaos, my calm. I’m so lucky to have you.";
 let i = 0;
 
-let mailBox = document.querySelector('.mail');
-let boxmail = document.querySelector('.boxMail');
-let close = document.querySelector('.fa-xmark');
-let letter = document.getElementById("letterText");
+function openLetter(){
+    document.getElementById("letter").style.display="block";
 
-mailBox.onclick = function () {
-
-    boxmail.classList.add('active');
-
-    // stop song
     document.getElementById("birthdaySong").pause();
 
-    // play voice
     let voice = document.getElementById("voiceNote");
     voice.currentTime = 0;
     voice.play();
 
-    i = 0;
-    letter.textContent = "";
+    let el = document.getElementById("text");
+    el.innerHTML="";
 
-    let interval = setInterval(() => {
-        if (i < text.length) {
-            letter.textContent += text[i];
+    function type(){
+        if(i < message.length){
+            el.innerHTML += message[i];
             i++;
-        } else clearInterval(interval);
-    }, 40);
-};
-
-close.onclick = () => boxmail.classList.remove('active');
-
+            setTimeout(type,40);
+        }
+    }
+    type();
+}
 
 /* CAKE */
 const cake = document.getElementById("cake");
 
-const colors = ["green-candle","purple-candle","blue-candle","yellow-candle"];
-
-function createCandles(count){
-  cake.innerHTML="";
-  for(let i=0;i<count;i++){
-    const c=document.createElement("div");
-    c.classList.add("candle");
-
-    const color=colors[Math.floor(Math.random()*colors.length)];
-    c.classList.add(color);
-
-    c.style.left=(i*12+10)+"px";
-    cake.appendChild(c);
-  }
+function createCandles(){
+    for(let i=0;i<6;i++){
+        let c = document.createElement("div");
+        c.className="candle";
+        c.style.left = (i*12+10)+"px";
+        cake.appendChild(c);
+    }
 }
-createCandles(6);
-
+createCandles();
 
 /* MIC */
 async function startMic(){
-  try{
-    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
-    const ctx = new AudioContext();
-    const analyser = ctx.createAnalyser();
-    const source = ctx.createMediaStreamSource(stream);
+    try{
+        const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+        const ctx = new AudioContext();
+        const analyser = ctx.createAnalyser();
+        const source = ctx.createMediaStreamSource(stream);
 
-    source.connect(analyser);
+        source.connect(analyser);
 
-    const data = new Uint8Array(analyser.frequencyBinCount);
+        const data = new Uint8Array(analyser.frequencyBinCount);
 
-    function detect(){
-      analyser.getByteFrequencyData(data);
+        function detect(){
+            analyser.getByteFrequencyData(data);
 
-      let avg = data.reduce((a,b)=>a+b)/data.length;
+            let avg = data.reduce((a,b)=>a+b)/data.length;
 
-      if(avg>60){
-        blow();
-        return;
-      }
+            if(avg>60){
+                blow();
+                return;
+            }
 
-      requestAnimationFrame(detect);
+            requestAnimationFrame(detect);
+        }
+        detect();
+
+    }catch(e){
+        console.log("mic blocked");
     }
-
-    detect();
-
-  }catch(e){
-    console.log("mic error", e);
-  }
 }
 
 function blow(){
-  document.querySelectorAll(".candle").forEach(c=>{
-    c.classList.add("blown");
-  });
+    document.querySelectorAll(".candle").forEach(c=>c.classList.add("blown"));
 
-  document.getElementById("status").innerText="YAY DODO 🎉";
+    document.getElementById("status").innerText="YAY DODO 🎉";
 
-  // play birthday song
-  let song = document.getElementById("birthdaySong");
-  song.currentTime = 0;
-  song.play();
-
-  setTimeout(()=>{
-    document.querySelector('.mail').click();
-  },1500);
+    let song = document.getElementById("birthdaySong");
+    song.currentTime=0;
+    song.play();
 }
 
 startMic();
